@@ -181,16 +181,6 @@ class Flexihash_Hashspace
 		return $results;
 	}
 
-	/**
-	 * Sets a new hasher.
-	 * The hasher shouldn't be changed after instantiation except in testing.
-	 * @param object $hasher Flexihash_Hasher
-	 */
-	public function setHasher(Flexihash_Hasher $hasher)
-	{
-		$this->_hasher = $hasher;
-	}
-
 	// ----------------------------------------
 	// private methods
 

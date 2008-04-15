@@ -162,9 +162,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 	public function testGetMultipleTargetsNeedingToLoopToStart()
 	{
 		$mockHasher = new MockHasher();
-
-		$hashSpace = new Flexihash_HashSpace(null, 1);
-		$hashSpace->setHasher($mockHasher);
+		$hashSpace = new Flexihash_HashSpace($mockHasher, 1);
 
 		$mockHasher->setHashValue(10);
 		$hashSpace->addTarget("t1");
@@ -190,9 +188,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 	public function testGetMultipleTargetsWithoutGettingAnyBeforeLoopToStart()
 	{
 		$mockHasher = new MockHasher();
-
-		$hashSpace = new Flexihash_HashSpace(null, 1);
-		$hashSpace->setHasher($mockHasher);
+		$hashSpace = new Flexihash_HashSpace($mockHasher, 1);
 
 		$mockHasher->setHashValue(10);
 		$hashSpace->addTarget("t1");
@@ -212,9 +208,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 	public function testGetMultipleTargetsWithoutNeedingToLoopToStart()
 	{
 		$mockHasher = new MockHasher();
-
-		$hashSpace = new Flexihash_HashSpace(null, 1);
-		$hashSpace->setHasher($mockHasher);
+		$hashSpace = new Flexihash_HashSpace($mockHasher, 1);
 
 		$mockHasher->setHashValue(10);
 		$hashSpace->addTarget("t1");
