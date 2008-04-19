@@ -225,6 +225,45 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 		$this->assertEqual($targets, array('t2', 't3'));
 	}
 
+	public function testFallbackPrecedenceWhenServerRemoved()
+	{
+		$mockHasher = new MockHasher();
+		$hashSpace = new Flexihash_HashSpace($mockHasher, 1);
+
+		$mockHasher->setHashValue(10);
+		$hashSpace->addTarget("t1");
+
+		$mockHasher->setHashValue(20);
+		$hashSpace->addTarget("t2");
+
+		$mockHasher->setHashValue(30);
+		$hashSpace->addTarget("t3");
+
+		$mockHasher->setHashValue(15);
+
+		$this->assertEqual($hashSpace->lookup('resource'), 't2');
+		$this->assertEqual(
+			$hashSpace->lookupList('resource', 3),
+			array('t2', 't3', 't1')
+		);
+
+		$hashSpace->removeTarget('t2');
+
+		$this->assertEqual($hashSpace->lookup('resource'), 't3');
+		$this->assertEqual(
+			$hashSpace->lookupList('resource', 3),
+			array('t3', 't1')
+		);
+
+		$hashSpace->removeTarget('t3');
+
+		$this->assertEqual($hashSpace->lookup('resource'), 't1');
+		$this->assertEqual(
+			$hashSpace->lookupList('resource', 3),
+			array('t1')
+		);
+	}
+
 }
 
 class MockHasher implements Flexihash_Hasher
