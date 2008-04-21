@@ -2,19 +2,21 @@
 
 /**
  * @author Paul Annesley
+ * @package Flexihash
+ * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Flexihash_HashSpaceTest extends UnitTestCase
+class Flexihash_FlexihashTest extends UnitTestCase
 {
 
 	public function testGetAllTargetsEmpty()
 	{
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		$this->assertEqual($hashSpace->getAllTargets(), array());
 	}
 
 	public function testAddTargetThrowsExceptionOnDuplicateTarget()
 	{
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		$hashSpace->addTarget('t-a');
 		$this->expectException('Flexihash_Exception');
 		$hashSpace->addTarget('t-a');
@@ -22,7 +24,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 
 	public function testAddTargetAndGetAllTargets()
 	{
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		$hashSpace
 			->addTarget('t-a')
 			->addTarget('t-b')
@@ -36,14 +38,14 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 	{
 		$targets = array('t-a', 't-b', 't-c');
 
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		$hashSpace->addTargets($targets);
 		$this->assertEqual($hashSpace->getAllTargets(), $targets);
 	}
 
 	public function testRemoveTarget()
 	{
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		$hashSpace
 			->addTarget('t-a')
 			->addTarget('t-b')
@@ -55,14 +57,14 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 
 	public function testRemoveTargetFailsOnMissingTarget()
 	{
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		$this->expectException('Flexihash_Exception');
 		$hashSpace->removeTarget('not-there');
 	}
 
 	public function testHashSpaceRepeatableLookups()
 	{
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		foreach (range(1,10) as $i) $hashSpace->addTarget("target$i");
 
 		$this->assertEqual($hashSpace->lookup('t1'), $hashSpace->lookup('t1'));
@@ -74,7 +76,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 		$targets = array();
 		foreach (range(1,10) as $i) $targets []= "target$i";
 
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		$hashSpace->addTargets($targets);
 
 		foreach (range(1,10	) as $i)
@@ -86,7 +88,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 
 	public function testHashSpaceConsistentLookupsAfterAddingAndRemoving()
 	{
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		foreach (range(1,10) as $i) $hashSpace->addTarget("target$i");
 
 		$results1 = array();
@@ -109,12 +111,12 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 
 	public function testHashSpaceConsistentLookupsWithNewInstance()
 	{
-		$hashSpace1 = new Flexihash_HashSpace();
+		$hashSpace1 = new Flexihash();
 		foreach (range(1,10) as $i) $hashSpace1->addTarget("target$i");
 		$results1 = array();
 		foreach (range(1, 100) as $i) $results1 []= $hashSpace1->lookup("t$i");
 
-		$hashSpace2 = new Flexihash_HashSpace();
+		$hashSpace2 = new Flexihash();
 		foreach (range(1,10) as $i) $hashSpace2->addTarget("target$i");
 		$results2 = array();
 		foreach (range(1, 100) as $i) $results2 []= $hashSpace2->lookup("t$i");
@@ -124,7 +126,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 
 	public function testGetMultipleTargets()
 	{
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		foreach (range(1,10) as $i) $hashSpace->addTarget("target$i");
 
 		$targets = $hashSpace->lookupList('resource', 2);
@@ -136,7 +138,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 
 	public function testGetMultipleTargetsWithOnlyOneTarget()
 	{
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		$hashSpace->addTarget("single-target");
 
 		$targets = $hashSpace->lookupList('resource', 2);
@@ -148,7 +150,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 
 	public function testGetMoreTargetsThanExist()
 	{
-		$hashSpace = new Flexihash_HashSpace();
+		$hashSpace = new Flexihash();
 		$hashSpace->addTarget("target1");
 		$hashSpace->addTarget("target2");
 
@@ -162,7 +164,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 	public function testGetMultipleTargetsNeedingToLoopToStart()
 	{
 		$mockHasher = new MockHasher();
-		$hashSpace = new Flexihash_HashSpace($mockHasher, 1);
+		$hashSpace = new Flexihash($mockHasher, 1);
 
 		$mockHasher->setHashValue(10);
 		$hashSpace->addTarget("t1");
@@ -188,7 +190,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 	public function testGetMultipleTargetsWithoutGettingAnyBeforeLoopToStart()
 	{
 		$mockHasher = new MockHasher();
-		$hashSpace = new Flexihash_HashSpace($mockHasher, 1);
+		$hashSpace = new Flexihash($mockHasher, 1);
 
 		$mockHasher->setHashValue(10);
 		$hashSpace->addTarget("t1");
@@ -208,7 +210,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 	public function testGetMultipleTargetsWithoutNeedingToLoopToStart()
 	{
 		$mockHasher = new MockHasher();
-		$hashSpace = new Flexihash_HashSpace($mockHasher, 1);
+		$hashSpace = new Flexihash($mockHasher, 1);
 
 		$mockHasher->setHashValue(10);
 		$hashSpace->addTarget("t1");
@@ -228,7 +230,7 @@ class Flexihash_HashSpaceTest extends UnitTestCase
 	public function testFallbackPrecedenceWhenServerRemoved()
 	{
 		$mockHasher = new MockHasher();
-		$hashSpace = new Flexihash_HashSpace($mockHasher, 1);
+		$hashSpace = new Flexihash($mockHasher, 1);
 
 		$mockHasher->setHashValue(10);
 		$hashSpace->addTarget("t1");

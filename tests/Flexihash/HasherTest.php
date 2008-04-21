@@ -2,13 +2,15 @@
 
 /**
  * @author Paul Annesley
+ * @package Flexihash
+ * @licence http://www.opensource.org/licenses/mit-license.php
  */
 class Flexihash_HasherTest extends UnitTestCase
 {
 
 	public function testCrc32Hash()
 	{
-		$hasher = new Flexihash_Hasher_Crc32Hasher();
+		$hasher = new Flexihash_Crc32Hasher();
 		$result1 = $hasher->hash('test');
 		$result2 = $hasher->hash('test');
 		$result3 = $hasher->hash('different');
@@ -19,7 +21,7 @@ class Flexihash_HasherTest extends UnitTestCase
 
 	public function testMd5Hash()
 	{
-		$hasher = new Flexihash_Hasher_Md5Hasher();
+		$hasher = new Flexihash_Md5Hasher();
 		$result1 = $hasher->hash('test');
 		$result2 = $hasher->hash('test');
 		$result3 = $hasher->hash('different');

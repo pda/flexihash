@@ -2,7 +2,10 @@
 
 /**
  * Benchmarks, not really tests.
+ *
  * @author Paul Annesley
+ * @package Flexihash
+ * @licence http://www.opensource.org/licenses/mit-license.php
  */
 class Flexihash_BenchmarkTest extends UnitTestCase
 {
@@ -45,8 +48,8 @@ class Flexihash_BenchmarkTest extends UnitTestCase
 
 	public function testHopeAddingTargetDoesNotChangeMuchWithCrc32Hasher()
 	{
-		$hashSpace = new Flexihash_HashSpace(
-			new Flexihash_Hasher_Crc32Hasher()
+		$hashSpace = new Flexihash(
+			new Flexihash_Crc32Hasher()
 		);
 		foreach (range(1,$this->_targets) as $i) $hashSpace->addTarget("target$i");
 
@@ -69,8 +72,8 @@ class Flexihash_BenchmarkTest extends UnitTestCase
 
 	public function testHopeRemovingTargetDoesNotChangeMuchWithCrc32Hasher()
 	{
-		$hashSpace = new Flexihash_HashSpace(
-			new Flexihash_Hasher_Crc32Hasher()
+		$hashSpace = new Flexihash(
+			new Flexihash_Crc32Hasher()
 		);
 		foreach (range(1,$this->_targets) as $i) $hashSpace->addTarget("target$i");
 
@@ -93,8 +96,8 @@ class Flexihash_BenchmarkTest extends UnitTestCase
 
 	public function testHashDistributionWithCrc32Hasher()
 	{
-		$hashSpace = new Flexihash_HashSpace(
-			new Flexihash_Hasher_Crc32Hasher()
+		$hashSpace = new Flexihash(
+			new Flexihash_Crc32Hasher()
 		);
 
 		foreach (range(1,$this->_targets) as $i) $hashSpace->addTarget("target$i");
@@ -122,8 +125,8 @@ class Flexihash_BenchmarkTest extends UnitTestCase
 	{
 		$hashCount = 100000;
 
-		$md5Hasher = new Flexihash_Hasher_Md5Hasher();
-		$crc32Hasher = new Flexihash_Hasher_Crc32Hasher();
+		$md5Hasher = new Flexihash_Md5Hasher();
+		$crc32Hasher = new Flexihash_Crc32Hasher();
 
 		$start = microtime(true);
 		for ($i = 0; $i < $hashCount; $i++)

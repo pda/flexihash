@@ -1,4 +1,11 @@
 <?php
+/**
+ * Basic command line test runner for Flexihash.
+ *
+ * @author Paul Annesley
+ * @package Flexihash
+ * @licence http://www.opensource.org/licenses/mit-license.php
+ */
 
 error_reporting(E_ALL);
 ini_set('display_errors', true);
@@ -6,7 +13,7 @@ ini_set('display_errors', true);
 require(dirname(__FILE__).'/../include/init.php');
 
 $basedir = realpath(dirname(__FILE__).'/..');
-unshift_include_path(array(
+flexihash_unshift_include_path(array(
 	"$basedir/lib/simpletest",
 	"$basedir/tests")
 );
@@ -33,26 +40,6 @@ EOM;
 require_once('simpletest/unit_tester.php');
 require_once('simpletest/reporter.php');
 
-/**
- * Return array of files matched, decending into subdirectories
- */
-function globr($dir, $pattern)
-{
-		$dir = escapeshellcmd($dir);
-
-		// list of all matching files currently in the directory.
-		$files = glob("$dir/$pattern");
-
-		// get a list of all directories in this directory
-		foreach (glob("$dir/*", GLOB_ONLYDIR) as $subdir)
-		{
-				$subfiles = globr($subdir, $pattern);
-				$files = array_merge($files, $subfiles);
-		}
-
-		return $files;
-}
-
 $withBenchmark = in_array('--with-benchmark', $argv);
 
 if (($testFileFlagIndex = array_search('--testfile', $argv)) !== false)
@@ -70,7 +57,7 @@ if (($testFileFlagIndex = array_search('--testfile', $argv)) !== false)
 else
 {
 	$test = new TestSuite('All Tests');
-	foreach (globr(dirname(__FILE__), '*Test.php') as $testFile)
+	foreach (flexihash_glob_recursive(dirname(__FILE__), '*Test.php') as $testFile)
 	{
 		if (!$withBenchmark && preg_match('#BenchmarkTest#', $testFile)) continue;
 
@@ -79,4 +66,30 @@ else
 }
 
 $test->run(new TextReporter());
+
+// ----------------------------------------
+// helper functions
+
+/**
+ * Return array of files matched, decending into subdirectories
+ * @param string $dir The base directory to search from.
+ * @param string $pattern The glob pattern.
+ * @return array [ 'path/to/file1', 'path/to/file2', ... ]
+ */
+function flexihash_glob_recursive($dir, $pattern)
+{
+		$dir = escapeshellcmd($dir);
+
+		// list of all matching files currently in the directory.
+		$files = glob("$dir/$pattern");
+
+		// get a list of all directories in this directory
+		foreach (glob("$dir/*", GLOB_ONLYDIR) as $subdir)
+		{
+				$subfiles = flexihash_glob_recursive($subdir, $pattern);
+				$files = array_merge($files, $subfiles);
+		}
+
+		return $files;
+}
 
