@@ -216,6 +216,15 @@ class Flexihash
 		return $results;
 	}
 
+	public function __toString()
+	{
+		return sprintf(
+			'%s{targets:[%s]}',
+			get_class($this),
+			implode(',', $this->getAllTargets())
+		);
+	}
+
 	// ----------------------------------------
 	// private methods
 
