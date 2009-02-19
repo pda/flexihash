@@ -61,9 +61,10 @@ class Flexihash
 	/**
 	 * Add a target.
 	 * @param string $target
+         * @param float $weight
 	 * @chainable
 	 */
-	public function addTarget($target)
+	public function addTarget($target, $weight=1)
 	{
 		if (isset($this->_targetToPositions[$target]))
 		{
@@ -73,7 +74,7 @@ class Flexihash
 		$this->_targetToPositions[$target] = array();
 
 		// hash the target into multiple positions
-		for ($i = 0; $i < $this->_replicas; $i++)
+		for ($i = 0; $i < round($this->_replicas*$weight); $i++)
 		{
 			$position = $this->_hasher->hash($target . $i);
 			$this->_positionToTarget[$position] = $target; // lookup
@@ -89,13 +90,14 @@ class Flexihash
 	/**
 	 * Add a list of targets.
 	 * @param array $targets
+         * @param float $weight
 	 * @chainable
 	 */
-	public function addTargets($targets)
+	public function addTargets($targets, $weight=1)
 	{
 		foreach ($targets as $target)
 		{
-			$this->addTarget($target);
+			$this->addTarget($target,$weight);
 		}
 
 		return $this;
