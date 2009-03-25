@@ -1,0 +1,3 @@
+[submodule "lib/simpletest"]
+	path = lib/simpletest
+	url = git://github.com/cbosuna/simpletest.git
