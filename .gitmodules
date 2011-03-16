@@ -1,3 +1,3 @@
 [submodule "lib/simpletest"]
 	path = lib/simpletest
-	url = git://github.com/cbosuna/simpletest.git
+	url = git://github.com/lox/simpletest.git
