@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Uses CRC32 to hash a value into a 32bit binary string data address space.
+ * Uses MD5 to hash a value into a 32bit binary string data address space.
  *
  * @author Paul Annesley
  * @package Flexihash
