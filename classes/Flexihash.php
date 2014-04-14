@@ -89,13 +89,12 @@ class Flexihash
 
 	/**
 	 * Add a list of targets.
-	 * @param array $targets
-         * @param float $weight
+	 * @param array $targets=>$weight
 	 * @chainable
 	 */
-	public function addTargets($targets, $weight=1)
+	public function addTargets($targets)
 	{
-		foreach ($targets as $target)
+		foreach ($targets as $target=>$weight)
 		{
 			$this->addTarget($target,$weight);
 		}
