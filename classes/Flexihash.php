@@ -190,6 +190,7 @@ class Flexihash
 			if ($collect && !in_array($value, $results))
 			{
 				$results []= $value;
+				$collect = false;
 			}
 
 			// return when enough results, or list exhausted
