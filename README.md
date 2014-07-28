@@ -31,6 +31,30 @@ $hash->removeTarget('cache-2');
 $hash->lookup('object'); // "cache-4"
 </pre>
 
+Installation
+------------
+
+If you're using composer, try creating a composor.json like :
+
+<pre>
+{ 
+    "repositories" : [
+        { 
+            "type" : "vcs",
+            "url": "https://github.com/pda/flexihash.git"
+        }
+    ],
+    "require" : {
+            "pda/flexihash" : "dev-master"
+    }
+}
+</pre>
+
+ * php composer.phar update
+ * add require_once('vendor/autoload.php') to your code....
+
+
+
 Further Reading
 ---------------
 

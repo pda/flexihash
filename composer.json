@@ -1,0 +1,9 @@
+{
+    "name" : "pda/flexihash",
+    "description": "Example of Consistent Hashing in PHP",
+    "version" : "dev-master",
+    "type" : "library",
+    "homepage" : "https://github.com/pda/flexihash",
+    "licence" : "MIT",
+    "autoload": { "classmap" : [ "classes/" ] }
+}
