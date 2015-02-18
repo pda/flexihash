@@ -1,5 +1,6 @@
 {
     "name": "damijanc/flexihash",
+    "type" : "library",
     "description": "Flexihash is a small PHP library which implements consistent hashing.",
     "license": "MIT",
     "authors": [
