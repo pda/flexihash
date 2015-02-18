@@ -36,11 +36,12 @@ class Flexihash_FlexihashTest extends UnitTestCase
 
 	public function testAddTargetsAndGetAllTargets()
 	{
-		$targets = array('t-a', 't-b', 't-c');
+        $targets = array('t-a'=>1, 't-b'=>2, 't-c'=>2);
+        $targets_without_weight = array('t-a', 't-b', 't-c');
 
 		$hashSpace = new Flexihash();
 		$hashSpace->addTargets($targets);
-		$this->assertEqual($hashSpace->getAllTargets(), $targets);
+		$this->assertEqual($hashSpace->getAllTargets(), $targets_without_weight);
 	}
 
 	public function testRemoveTarget()
@@ -74,14 +75,18 @@ class Flexihash_FlexihashTest extends UnitTestCase
 	public function testHashSpaceLookupsAreValidTargets()
 	{
 		$targets = array();
-		foreach (range(1,10) as $i) $targets []= "target$i";
+        foreach (range(1,10) as $i)
+        {
+            $targets_without_weight []= "target$i";
+		    $targets ["target$i"]= 1;
+        }
 
 		$hashSpace = new Flexihash();
 		$hashSpace->addTargets($targets);
 
 		foreach (range(1,10	) as $i)
 		{
-			$this->assertTrue(in_array($hashSpace->lookup("r$i"), $targets),
+			$this->assertTrue(in_array($hashSpace->lookup("r$i"), $targets_without_weight),
 				'target must be in list of targets');
 		}
 	}
