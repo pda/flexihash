@@ -19,12 +19,12 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
 
     public function testAddTargetWithNonConsistentHash()
     {
-        $results1 = [];
+        $results1 = array();
         foreach (range(1, $this->lookups) as $i) {
             $results1[$i] = $this->basicHash("t$i", 10);
         }
 
-        $results2 = [];
+        $results2 = array();
         foreach (range(1, $this->lookups) as $i) {
             $results2[$i] = $this->basicHash("t$i", 11);
         }
@@ -32,7 +32,7 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
         $differences = 0;
         foreach (range(1, $this->lookups) as $i) {
             if ($results1[$i] !== $results2[$i]) {
-                $differences++;
+                ++$differences;
             }
         }
 
@@ -44,12 +44,12 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
 
     public function testRemoveTargetWithNonConsistentHash()
     {
-        $results1 = [];
+        $results1 = array();
         foreach (range(1, $this->lookups) as $i) {
             $results1[$i] = $this->basicHash("t$i", 10);
         }
 
-        $results2 = [];
+        $results2 = array();
         foreach (range(1, $this->lookups) as $i) {
             $results2[$i] = $this->basicHash("t$i", 9);
         }
@@ -57,7 +57,7 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
         $differences = 0;
         foreach (range(1, $this->lookups) as $i) {
             if ($results1[$i] !== $results2[$i]) {
-                $differences++;
+                ++$differences;
             }
         }
 
@@ -76,14 +76,14 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
             $hashSpace->addTarget("target$i");
         }
 
-        $results1 = [];
+        $results1 = array();
         foreach (range(1, $this->lookups) as $i) {
             $results1[$i] = $hashSpace->lookup("t$i");
         }
 
         $hashSpace->addTarget('target-new');
 
-        $results2 = [];
+        $results2 = array();
         foreach (range(1, $this->lookups) as $i) {
             $results2[$i] = $hashSpace->lookup("t$i");
         }
@@ -91,7 +91,7 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
         $differences = 0;
         foreach (range(1, $this->lookups) as $i) {
             if ($results1[$i] !== $results2[$i]) {
-                $differences++;
+                ++$differences;
             }
         }
 
@@ -110,14 +110,14 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
             $hashSpace->addTarget("target$i");
         }
 
-        $results1 = [];
+        $results1 = array();
         foreach (range(1, $this->lookups) as $i) {
             $results1[$i] = $hashSpace->lookup("t$i");
         }
 
         $hashSpace->removeTarget('target1');
 
-        $results2 = [];
+        $results2 = array();
         foreach (range(1, $this->lookups) as $i) {
             $results2[$i] = $hashSpace->lookup("t$i");
         }
@@ -125,7 +125,7 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
         $differences = 0;
         foreach (range(1, $this->lookups) as $i) {
             if ($results1[$i] !== $results2[$i]) {
-                $differences++;
+                ++$differences;
             }
         }
 
@@ -145,12 +145,12 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
             $hashSpace->addTarget("target$i");
         }
 
-        $results = [];
+        $results = array();
         foreach (range(1, $this->lookups) as $i) {
             $results[$i] = $hashSpace->lookup("t$i");
         }
 
-        $distribution = [];
+        $distribution = array();
         foreach ($hashSpace->getAllTargets() as $target) {
             $distribution[$target] = count(array_keys($results, $target));
         }

@@ -31,13 +31,13 @@ class Flexihash
      * Internal map of positions (hash outputs) to targets.
      * @var array { position => target, ... }
      */
-    private $positionToTarget = [];
+    private $positionToTarget = array();
 
     /**
      * Internal map of targets to lists of positions that target is hashed to.
      * @var array { target => [ position, position, ... ], ... }
      */
-    private $targetToPositions = [];
+    private $targetToPositions = array();
 
     /**
      * Whether the internal map of positions to targets is already sorted.
@@ -70,7 +70,7 @@ class Flexihash
             throw new Flexihash_Exception("Target '$target' already exists.");
         }
 
-        $this->targetToPositions[$target] = [];
+        $this->targetToPositions[$target] = array();
 
         // hash the target into multiple positions
         for ($i = 0; $i < round($this->replicas * $weight); ++$i) {
@@ -162,7 +162,7 @@ class Flexihash
 
         // handle no targets
         if (empty($this->positionToTarget)) {
-            return [];
+            return array();
         }
 
         // optimize single target
@@ -173,7 +173,7 @@ class Flexihash
         // hash resource to a position
         $resourcePosition = $this->hasher->hash($resource);
 
-        $results = [];
+        $results = array();
         $collect = false;
 
         $this->sortPositionTargets();
