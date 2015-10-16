@@ -1,5 +1,5 @@
 #Flexihash
-[![Build Status](https://travis-ci.org/dmnc/flexihash.svg?branch=master)](https://travis-ci.org/dmnc/flexihash)
+[![Build Status](https://travis-ci.org/dmnc/flexihash.svg?branch=master)](https://travis-ci.org/dmnc/flexihash) [![Coverage Status](https://coveralls.io/repos/dmnc/flexihash/badge.svg?branch=master&service=github)](https://coveralls.io/github/dmnc/flexihash?branch=master)
 
 Flexihash is a small PHP library which implements [consistent hashing](http://en.wikipedia.org/wiki/Consistent_hashing), which is most useful in distributed caching.  It requires PHP5 and uses [SimpleTest](http://simpletest.org/) for unit testing.
 
@@ -35,13 +35,13 @@ $hash->lookup('object'); // "cache-4"
 
 ##Roadmap
 - [ ] v1 Initial packagist release
-  - [ ] Composer support
+  - [x] Composer support
   - [ ] PSR2
 - [ ] v2 API breaking refactor
-  - [ ] Migrate tests to PHPUnit
+  - [x] Migrate tests to PHPUnit
   - [ ] Introduce namespacing
   - [ ] PSR4 autoloading
-  - [ ] Automoated testing
+  - [x] Automated testing
 
 ##Further Reading
 
