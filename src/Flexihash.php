@@ -13,37 +13,37 @@ class Flexihash
      *
      * @var int
      */
-    private $_replicas = 64;
+    private $replicas = 64;
 
     /**
      * The hash algorithm, encapsulated in a Flexihash_Hasher implementation.
      * @var object Flexihash_Hasher
      */
-    private $_hasher;
+    private $hasher;
 
     /**
      * Internal counter for current number of targets.
      * @var int
      */
-    private $_targetCount = 0;
+    private $targetCount = 0;
 
     /**
      * Internal map of positions (hash outputs) to targets.
      * @var array { position => target, ... }
      */
-    private $_positionToTarget = [];
+    private $positionToTarget = [];
 
     /**
      * Internal map of targets to lists of positions that target is hashed to.
      * @var array { target => [ position, position, ... ], ... }
      */
-    private $_targetToPositions = [];
+    private $targetToPositions = [];
 
     /**
      * Whether the internal map of positions to targets is already sorted.
      * @var bool
      */
-    private $_positionToTargetSorted = false;
+    private $positionToTargetSorted = false;
 
     /**
      * Constructor.
@@ -52,9 +52,9 @@ class Flexihash
      */
     public function __construct(Flexihash_Hasher $hasher = null, $replicas = null)
     {
-        $this->_hasher = $hasher ? $hasher : new Flexihash_Crc32Hasher();
+        $this->hasher = $hasher ? $hasher : new Flexihash_Crc32Hasher();
         if (!empty($replicas)) {
-            $this->_replicas = $replicas;
+            $this->replicas = $replicas;
         }
     }
 
@@ -66,21 +66,21 @@ class Flexihash
      */
     public function addTarget($target, $weight = 1)
     {
-        if (isset($this->_targetToPositions[$target])) {
+        if (isset($this->targetToPositions[$target])) {
             throw new Flexihash_Exception("Target '$target' already exists.");
         }
 
-        $this->_targetToPositions[$target] = [];
+        $this->targetToPositions[$target] = [];
 
         // hash the target into multiple positions
-        for ($i = 0; $i < round($this->_replicas * $weight); ++$i) {
-            $position = $this->_hasher->hash($target.$i);
-            $this->_positionToTarget[$position] = $target; // lookup
-            $this->_targetToPositions[$target] [] = $position; // target removal
+        for ($i = 0; $i < round($this->replicas * $weight); ++$i) {
+            $position = $this->hasher->hash($target.$i);
+            $this->positionToTarget[$position] = $target; // lookup
+            $this->targetToPositions[$target] [] = $position; // target removal
         }
 
-        $this->_positionToTargetSorted = false;
-        ++$this->_targetCount;
+        $this->positionToTargetSorted = false;
+        ++$this->targetCount;
 
         return $this;
     }
@@ -107,17 +107,17 @@ class Flexihash
      */
     public function removeTarget($target)
     {
-        if (!isset($this->_targetToPositions[$target])) {
+        if (!isset($this->targetToPositions[$target])) {
             throw new Flexihash_Exception("Target '$target' does not exist.");
         }
 
-        foreach ($this->_targetToPositions[$target] as $position) {
-            unset($this->_positionToTarget[$position]);
+        foreach ($this->targetToPositions[$target] as $position) {
+            unset($this->positionToTarget[$position]);
         }
 
-        unset($this->_targetToPositions[$target]);
+        unset($this->targetToPositions[$target]);
 
-        --$this->_targetCount;
+        --$this->targetCount;
 
         return $this;
     }
@@ -128,7 +128,7 @@ class Flexihash
      */
     public function getAllTargets()
     {
-        return array_keys($this->_targetToPositions);
+        return array_keys($this->targetToPositions);
     }
 
     /**
@@ -161,25 +161,25 @@ class Flexihash
         }
 
         // handle no targets
-        if (empty($this->_positionToTarget)) {
+        if (empty($this->positionToTarget)) {
             return [];
         }
 
         // optimize single target
-        if ($this->_targetCount == 1) {
-            return array_unique(array_values($this->_positionToTarget));
+        if ($this->targetCount == 1) {
+            return array_unique(array_values($this->positionToTarget));
         }
 
         // hash resource to a position
-        $resourcePosition = $this->_hasher->hash($resource);
+        $resourcePosition = $this->hasher->hash($resource);
 
         $results = [];
         $collect = false;
 
-        $this->_sortPositionTargets();
+        $this->sortPositionTargets();
 
         // search values above the resourcePosition
-        foreach ($this->_positionToTarget as $key => $value) {
+        foreach ($this->positionToTarget as $key => $value) {
             // start collecting targets after passing resource position
             if (!$collect && $key > $resourcePosition) {
                 $collect = true;
@@ -191,19 +191,19 @@ class Flexihash
             }
 
             // return when enough results, or list exhausted
-            if (count($results) == $requestedCount || count($results) == $this->_targetCount) {
+            if (count($results) == $requestedCount || count($results) == $this->targetCount) {
                 return $results;
             }
         }
 
         // loop to start - search values below the resourcePosition
-        foreach ($this->_positionToTarget as $key => $value) {
+        foreach ($this->positionToTarget as $key => $value) {
             if (!in_array($value, $results)) {
                 $results [] = $value;
             }
 
             // return when enough results, or list exhausted
-            if (count($results) == $requestedCount || count($results) == $this->_targetCount) {
+            if (count($results) == $requestedCount || count($results) == $this->targetCount) {
                 return $results;
             }
         }
@@ -227,12 +227,12 @@ class Flexihash
     /**
      * Sorts the internal mapping (positions to targets) by position.
      */
-    private function _sortPositionTargets()
+    private function sortPositionTargets()
     {
         // sort by key (position) if not already
-        if (!$this->_positionToTargetSorted) {
-            ksort($this->_positionToTarget, SORT_REGULAR);
-            $this->_positionToTargetSorted = true;
+        if (!$this->positionToTargetSorted) {
+            ksort($this->positionToTarget, SORT_REGULAR);
+            $this->positionToTargetSorted = true;
         }
     }
 }

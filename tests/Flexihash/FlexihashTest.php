@@ -288,15 +288,15 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
 
 class MockHasher implements Flexihash_Hasher
 {
-    private $_hashValue;
+    private $hashValue;
 
     public function setHashValue($hash)
     {
-        $this->_hashValue = $hash;
+        $this->hashValue = $hash;
     }
 
     public function hash($value)
     {
-        return $this->_hashValue;
+        return $this->hashValue;
     }
 }

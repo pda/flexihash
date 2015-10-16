@@ -9,8 +9,8 @@
  */
 class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
 {
-    private $_targets = 10;
-    private $_lookups = 1000;
+    private $targets = 10;
+    private $lookups = 1000;
 
     public function dump($message)
     {
@@ -20,51 +20,51 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
     public function testAddTargetWithNonConsistentHash()
     {
         $results1 = [];
-        foreach (range(1, $this->_lookups) as $i) {
-            $results1[$i] = $this->_basicHash("t$i", 10);
+        foreach (range(1, $this->lookups) as $i) {
+            $results1[$i] = $this->basicHash("t$i", 10);
         }
 
         $results2 = [];
-        foreach (range(1, $this->_lookups) as $i) {
-            $results2[$i] = $this->_basicHash("t$i", 11);
+        foreach (range(1, $this->lookups) as $i) {
+            $results2[$i] = $this->basicHash("t$i", 11);
         }
 
         $differences = 0;
-        foreach (range(1, $this->_lookups) as $i) {
+        foreach (range(1, $this->lookups) as $i) {
             if ($results1[$i] !== $results2[$i]) {
                 $differences++;
             }
         }
 
-        $percent = round($differences / $this->_lookups * 100);
+        $percent = round($differences / $this->lookups * 100);
 
         $this->dump("NonConsistentHash: {$percent}% of lookups changed ".
-            "after adding a target to the existing {$this->_targets}");
+            "after adding a target to the existing {$this->targets}");
     }
 
     public function testRemoveTargetWithNonConsistentHash()
     {
         $results1 = [];
-        foreach (range(1, $this->_lookups) as $i) {
-            $results1[$i] = $this->_basicHash("t$i", 10);
+        foreach (range(1, $this->lookups) as $i) {
+            $results1[$i] = $this->basicHash("t$i", 10);
         }
 
         $results2 = [];
-        foreach (range(1, $this->_lookups) as $i) {
-            $results2[$i] = $this->_basicHash("t$i", 9);
+        foreach (range(1, $this->lookups) as $i) {
+            $results2[$i] = $this->basicHash("t$i", 9);
         }
 
         $differences = 0;
-        foreach (range(1, $this->_lookups) as $i) {
+        foreach (range(1, $this->lookups) as $i) {
             if ($results1[$i] !== $results2[$i]) {
                 $differences++;
             }
         }
 
-        $percent = round($differences / $this->_lookups * 100);
+        $percent = round($differences / $this->lookups * 100);
 
         $this->dump("NonConsistentHash: {$percent}% of lookups changed ".
-            "after removing 1 of {$this->_targets} targets");
+            "after removing 1 of {$this->targets} targets");
     }
 
     public function testHopeAddingTargetDoesNotChangeMuchWithCrc32Hasher()
@@ -72,33 +72,33 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
         $hashSpace = new Flexihash(
             new Flexihash_Crc32Hasher()
         );
-        foreach (range(1, $this->_targets) as $i) {
+        foreach (range(1, $this->targets) as $i) {
             $hashSpace->addTarget("target$i");
         }
 
         $results1 = [];
-        foreach (range(1, $this->_lookups) as $i) {
+        foreach (range(1, $this->lookups) as $i) {
             $results1[$i] = $hashSpace->lookup("t$i");
         }
 
         $hashSpace->addTarget('target-new');
 
         $results2 = [];
-        foreach (range(1, $this->_lookups) as $i) {
+        foreach (range(1, $this->lookups) as $i) {
             $results2[$i] = $hashSpace->lookup("t$i");
         }
 
         $differences = 0;
-        foreach (range(1, $this->_lookups) as $i) {
+        foreach (range(1, $this->lookups) as $i) {
             if ($results1[$i] !== $results2[$i]) {
                 $differences++;
             }
         }
 
-        $percent = round($differences / $this->_lookups * 100);
+        $percent = round($differences / $this->lookups * 100);
 
         $this->dump("ConsistentHash: {$percent}% of lookups changed ".
-            "after adding a target to the existing {$this->_targets}");
+            "after adding a target to the existing {$this->targets}");
     }
 
     public function testHopeRemovingTargetDoesNotChangeMuchWithCrc32Hasher()
@@ -106,33 +106,33 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
         $hashSpace = new Flexihash(
             new Flexihash_Crc32Hasher()
         );
-        foreach (range(1, $this->_targets) as $i) {
+        foreach (range(1, $this->targets) as $i) {
             $hashSpace->addTarget("target$i");
         }
 
         $results1 = [];
-        foreach (range(1, $this->_lookups) as $i) {
+        foreach (range(1, $this->lookups) as $i) {
             $results1[$i] = $hashSpace->lookup("t$i");
         }
 
         $hashSpace->removeTarget('target1');
 
         $results2 = [];
-        foreach (range(1, $this->_lookups) as $i) {
+        foreach (range(1, $this->lookups) as $i) {
             $results2[$i] = $hashSpace->lookup("t$i");
         }
 
         $differences = 0;
-        foreach (range(1, $this->_lookups) as $i) {
+        foreach (range(1, $this->lookups) as $i) {
             if ($results1[$i] !== $results2[$i]) {
                 $differences++;
             }
         }
 
-        $percent = round($differences / $this->_lookups * 100);
+        $percent = round($differences / $this->lookups * 100);
 
         $this->dump("ConsistentHash: {$percent}% of lookups changed ".
-            "after removing 1 of {$this->_targets} targets");
+            "after removing 1 of {$this->targets} targets");
     }
 
     public function testHashDistributionWithCrc32Hasher()
@@ -141,12 +141,12 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
             new Flexihash_Crc32Hasher()
         );
 
-        foreach (range(1, $this->_targets) as $i) {
+        foreach (range(1, $this->targets) as $i) {
             $hashSpace->addTarget("target$i");
         }
 
         $results = [];
-        foreach (range(1, $this->_lookups) as $i) {
+        foreach (range(1, $this->lookups) as $i) {
             $results[$i] = $hashSpace->lookup("t$i");
         }
 
@@ -157,10 +157,10 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
 
         $this->dump(sprintf(
             'Distribution of %d lookups per target (min/max/median/avg): %d/%d/%d/%d',
-            $this->_lookups / $this->_targets,
+            $this->lookups / $this->targets,
             min($distribution),
             max($distribution),
-            round($this->_median($distribution)),
+            round($this->median($distribution)),
             round(array_sum($distribution) / count($distribution))
         ));
     }
@@ -194,7 +194,7 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
 
     // ----------------------------------------
 
-    private function _basicHash($value, $targets)
+    private function basicHash($value, $targets)
     {
         return abs(crc32($value) % $targets);
     }
@@ -203,7 +203,7 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
      * @param array $array list of numeric values
      * @return numeric
      */
-    private function _median($values)
+    private function median($values)
     {
         $values = array_values($values);
         sort($values);

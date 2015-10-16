@@ -3,7 +3,6 @@
  <description>The D3R Coding Standard</description>
  <rule ref="PSR2">
     <exclude name="PSR1.Classes.ClassDeclaration" />
-    <exclude name="PSR2.Classes.PropertyDeclaration" />
     <exclude name="Squiz.Classes.ValidClassName" />
  </rule>
 </ruleset>
