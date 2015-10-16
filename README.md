@@ -1,6 +1,6 @@
 #Flexihash
 
-Flexihash is a small PHP library which implements [http://en.wikipedia.org/wiki/Consistent_hashing consistent hashing], which is most useful in distributed caching.  It requires PHP5 and uses [http://simpletest.org/ SimpleTest] for unit testing.
+Flexihash is a small PHP library which implements [consistent hashing](http://en.wikipedia.org/wiki/Consistent_hashing), which is most useful in distributed caching.  It requires PHP5 and uses [SimpleTest](http://simpletest.org/) for unit testing.
 
 This is a fork from PDA's [flexihash](https://github.com/pda/flexihash) created to add composer support and meet PSR standards.
 
