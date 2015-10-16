@@ -1,5 +1,5 @@
 #Flexihash
-[![Build Status](https://travis-ci.org/dmnc/flexihash.svg?branch=master)](https://travis-ci.org/clouddueling/travis-ci-php-example)
+[![Build Status](https://travis-ci.org/dmnc/flexihash.svg?branch=master)](https://travis-ci.org/dmnc/flexihash)
 
 Flexihash is a small PHP library which implements [consistent hashing](http://en.wikipedia.org/wiki/Consistent_hashing), which is most useful in distributed caching.  It requires PHP5 and uses [SimpleTest](http://simpletest.org/) for unit testing.
 
