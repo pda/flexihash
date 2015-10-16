@@ -1,10 +1,10 @@
-Flexihash
-=========
+#Flexihash
 
 Flexihash is a small PHP library which implements [http://en.wikipedia.org/wiki/Consistent_hashing consistent hashing], which is most useful in distributed caching.  It requires PHP5 and uses [http://simpletest.org/ SimpleTest] for unit testing.
 
-Usage Example
--------------
+This is a fork from PDA's [flexihash](https://github.com/pda/flexihash) created to add composer support and meet PSR standards.
+
+##Usage Example
 
 <pre>
 &lt;?php
@@ -31,8 +31,18 @@ $hash->removeTarget('cache-2');
 $hash->lookup('object'); // "cache-4"
 </pre>
 
-Further Reading
----------------
+
+##Roadmap
+- [ ] v1 Initial packagist release
+  - [ ] Composer support
+  - [ ] PSR2
+- [ ] v2 API breaking refactor
+  - [ ] Migrate tests to PHPUnit
+  - [ ] Introduce namespacing
+  - [ ] PSR4 autoloading
+  - [ ] Automoated testing
+
+##Further Reading
 
   * http://www.spiteful.com/2008/03/17/programmers-toolbox-part-3-consistent-hashing/
   * http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html
