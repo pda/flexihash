@@ -5,12 +5,18 @@
  *
  * @author Paul Annesley
  * @package Flexihash
+ * @group benchmark
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Flexihash_BenchmarkTest extends UnitTestCase
+class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
 {
 	private $_targets = 10;
 	private $_lookups = 1000;
+
+	public function dump($message)
+	{
+		echo $message . "\n";
+	}
 
 	public function testAddTargetWithNonConsistentHash()
 	{

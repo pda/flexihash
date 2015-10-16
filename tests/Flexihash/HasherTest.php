@@ -5,7 +5,7 @@
  * @package Flexihash
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Flexihash_HasherTest extends UnitTestCase
+class Flexihash_HasherTest extends PHPUnit_Framework_TestCase
 {
 
 	public function testCrc32Hash()
@@ -15,8 +15,8 @@ class Flexihash_HasherTest extends UnitTestCase
 		$result2 = $hasher->hash('test');
 		$result3 = $hasher->hash('different');
 
-		$this->assertEqual($result1, $result2);
-		$this->assertNotEqual($result1, $result3); // fragile but worthwhile
+		$this->assertEquals($result1, $result2);
+		$this->assertNotEquals($result1, $result3); // fragile but worthwhile
 	}
 
 	public function testMd5Hash()
@@ -26,8 +26,8 @@ class Flexihash_HasherTest extends UnitTestCase
 		$result2 = $hasher->hash('test');
 		$result3 = $hasher->hash('different');
 
-		$this->assertEqual($result1, $result2);
-		$this->assertNotEqual($result1, $result3); // fragile but worthwhile
+		$this->assertEquals($result1, $result2);
+		$this->assertNotEquals($result1, $result3); // fragile but worthwhile
 	}
 
 }

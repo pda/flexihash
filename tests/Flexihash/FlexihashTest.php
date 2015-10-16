@@ -5,20 +5,20 @@
  * @package Flexihash
  * @licence http://www.opensource.org/licenses/mit-license.php
  */
-class Flexihash_FlexihashTest extends UnitTestCase
+class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
 {
 
 	public function testGetAllTargetsEmpty()
 	{
 		$hashSpace = new Flexihash();
-		$this->assertEqual($hashSpace->getAllTargets(), array());
+		$this->assertEquals($hashSpace->getAllTargets(), array());
 	}
 
 	public function testAddTargetThrowsExceptionOnDuplicateTarget()
 	{
 		$hashSpace = new Flexihash();
 		$hashSpace->addTarget('t-a');
-		$this->expectException('Flexihash_Exception');
+		$this->setExpectedException('Flexihash_Exception');
 		$hashSpace->addTarget('t-a');
 	}
 
@@ -31,7 +31,7 @@ class Flexihash_FlexihashTest extends UnitTestCase
 			->addTarget('t-c')
 			;
 
-		$this->assertEqual($hashSpace->getAllTargets(), array('t-a', 't-b', 't-c'));
+		$this->assertEquals($hashSpace->getAllTargets(), array('t-a', 't-b', 't-c'));
 	}
 
 	public function testAddTargetsAndGetAllTargets()
@@ -40,7 +40,7 @@ class Flexihash_FlexihashTest extends UnitTestCase
 
 		$hashSpace = new Flexihash();
 		$hashSpace->addTargets($targets);
-		$this->assertEqual($hashSpace->getAllTargets(), $targets);
+		$this->assertEquals($hashSpace->getAllTargets(), $targets);
 	}
 
 	public function testRemoveTarget()
@@ -52,13 +52,13 @@ class Flexihash_FlexihashTest extends UnitTestCase
 			->addTarget('t-c')
 			->removeTarget('t-b')
 			;
-		$this->assertEqual($hashSpace->getAllTargets(), array('t-a', 't-c'));
+		$this->assertEquals($hashSpace->getAllTargets(), array('t-a', 't-c'));
 	}
 
 	public function testRemoveTargetFailsOnMissingTarget()
 	{
 		$hashSpace = new Flexihash();
-		$this->expectException('Flexihash_Exception');
+		$this->setExpectedException('Flexihash_Exception');
 		$hashSpace->removeTarget('not-there');
 	}
 
@@ -67,8 +67,8 @@ class Flexihash_FlexihashTest extends UnitTestCase
 		$hashSpace = new Flexihash();
 		foreach (range(1,10) as $i) $hashSpace->addTarget("target$i");
 
-		$this->assertEqual($hashSpace->lookup('t1'), $hashSpace->lookup('t1'));
-		$this->assertEqual($hashSpace->lookup('t2'), $hashSpace->lookup('t2'));
+		$this->assertEquals($hashSpace->lookup('t1'), $hashSpace->lookup('t1'));
+		$this->assertEquals($hashSpace->lookup('t2'), $hashSpace->lookup('t2'));
 	}
 
 	public function testHashSpaceLookupsAreValidTargets()
@@ -106,7 +106,7 @@ class Flexihash_FlexihashTest extends UnitTestCase
 
 		// This is probably optimistic, as adding/removing a target may
 		// clobber existing targets and is not expected to restore them.
-		$this->assertEqual($results1, $results2);
+		$this->assertEquals($results1, $results2);
 	}
 
 	public function testHashSpaceConsistentLookupsWithNewInstance()
@@ -121,7 +121,7 @@ class Flexihash_FlexihashTest extends UnitTestCase
 		$results2 = array();
 		foreach (range(1, 100) as $i) $results2 []= $hashSpace2->lookup("t$i");
 
-		$this->assertEqual($results1, $results2);
+		$this->assertEquals($results1, $results2);
 	}
 
 	public function testGetMultipleTargets()
@@ -131,9 +131,9 @@ class Flexihash_FlexihashTest extends UnitTestCase
 
 		$targets = $hashSpace->lookupList('resource', 2);
 
-		$this->assertIsA($targets, 'array');
-		$this->assertEqual(count($targets), 2);
-		$this->assertNotEqual($targets[0], $targets[1]);
+		$this->assertInternalType('array', $targets);
+		$this->assertEquals(count($targets), 2);
+		$this->assertNotEquals($targets[0], $targets[1]);
 	}
 
 	public function testGetMultipleTargetsWithOnlyOneTarget()
@@ -143,9 +143,9 @@ class Flexihash_FlexihashTest extends UnitTestCase
 
 		$targets = $hashSpace->lookupList('resource', 2);
 
-		$this->assertIsA($targets, 'array');
-		$this->assertEqual(count($targets), 1);
-		$this->assertEqual($targets[0], 'single-target');
+		$this->assertInternalType('array', $targets);
+		$this->assertEquals(count($targets), 1);
+		$this->assertEquals($targets[0], 'single-target');
 	}
 
 	public function testGetMoreTargetsThanExist()
@@ -156,9 +156,9 @@ class Flexihash_FlexihashTest extends UnitTestCase
 
 		$targets = $hashSpace->lookupList('resource', 4);
 
-		$this->assertIsA($targets, 'array');
-		$this->assertEqual(count($targets), 2);
-		$this->assertNotEqual($targets[0], $targets[1]);
+		$this->assertInternalType('array', $targets);
+		$this->assertEquals(count($targets), 2);
+		$this->assertNotEquals($targets[0], $targets[1]);
 	}
 
 	public function testGetMultipleTargetsNeedingToLoopToStart()
@@ -184,7 +184,7 @@ class Flexihash_FlexihashTest extends UnitTestCase
 		$mockHasher->setHashValue(35);
 		$targets = $hashSpace->lookupList('resource', 4);
 
-		$this->assertEqual($targets, array('t4', 't5', 't1', 't2'));
+		$this->assertEquals($targets, array('t4', 't5', 't1', 't2'));
 	}
 
 	public function testGetMultipleTargetsWithoutGettingAnyBeforeLoopToStart()
@@ -204,7 +204,7 @@ class Flexihash_FlexihashTest extends UnitTestCase
 		$mockHasher->setHashValue(100);
 		$targets = $hashSpace->lookupList('resource', 2);
 
-		$this->assertEqual($targets, array('t1', 't2'));
+		$this->assertEquals($targets, array('t1', 't2'));
 	}
 
 	public function testGetMultipleTargetsWithoutNeedingToLoopToStart()
@@ -224,7 +224,7 @@ class Flexihash_FlexihashTest extends UnitTestCase
 		$mockHasher->setHashValue(15);
 		$targets = $hashSpace->lookupList('resource', 2);
 
-		$this->assertEqual($targets, array('t2', 't3'));
+		$this->assertEquals($targets, array('t2', 't3'));
 	}
 
 	public function testFallbackPrecedenceWhenServerRemoved()
@@ -243,24 +243,24 @@ class Flexihash_FlexihashTest extends UnitTestCase
 
 		$mockHasher->setHashValue(15);
 
-		$this->assertEqual($hashSpace->lookup('resource'), 't2');
-		$this->assertEqual(
+		$this->assertEquals($hashSpace->lookup('resource'), 't2');
+		$this->assertEquals(
 			$hashSpace->lookupList('resource', 3),
 			array('t2', 't3', 't1')
 		);
 
 		$hashSpace->removeTarget('t2');
 
-		$this->assertEqual($hashSpace->lookup('resource'), 't3');
-		$this->assertEqual(
+		$this->assertEquals($hashSpace->lookup('resource'), 't3');
+		$this->assertEquals(
 			$hashSpace->lookupList('resource', 3),
 			array('t3', 't1')
 		);
 
 		$hashSpace->removeTarget('t3');
 
-		$this->assertEqual($hashSpace->lookup('resource'), 't1');
-		$this->assertEqual(
+		$this->assertEquals($hashSpace->lookup('resource'), 't1');
+		$this->assertEquals(
 			$hashSpace->lookupList('resource', 3),
 			array('t1')
 		);

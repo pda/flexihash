@@ -19,6 +19,6 @@
         "phpunit/phpunit": "^4.8"
     },
     "autoload": {
-        "psr-0": { "Flexihash_": "src" }
+        "psr-0": { "Flexihash": "src" }
     }
 }
