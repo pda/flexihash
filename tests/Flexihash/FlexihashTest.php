@@ -71,6 +71,41 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($hashSpace->lookup('t2'), $hashSpace->lookup('t2'));
     }
 
+    /**
+     * This should throw an exception really.
+     *
+     * @author Dom Morgan <dom@d3r.com>
+     */
+    public function testHashSpaceLookupListEmpty()
+    {
+        $hashSpace = new Flexihash();
+        $this->assertEmpty($hashSpace->lookupList('t1', 2));
+    }
+
+    /**
+     * @expectedException        Flexihash_Exception
+     * @expectedExceptionMessage No targets exist
+     *
+     * @author Dom Morgan <dom@d3r.com>
+     */
+    public function testHashSpaceLookupListNoTargets()
+    {
+        $hashSpace = new Flexihash();
+        $hashSpace->lookup('t1');
+    }
+
+    /**
+     * @expectedException        Flexihash_Exception
+     * @expectedExceptionMessage Invalid count requested
+     *
+     * @author Dom Morgan <dom@d3r.com>
+     */
+    public function testHashSpaceLookupListNo()
+    {
+        $hashSpace = new Flexihash();
+        $hashSpace->lookupList('t1', 0);
+    }
+
     public function testHashSpaceLookupsAreValidTargets()
     {
         $targets = array();
@@ -282,6 +317,24 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             $hashSpace->lookupList('resource', 3),
             array('t1')
+        );
+    }
+
+    /**
+     * Does the __toString method behave as we expect
+     *
+     * @author Dom Morgan <dom@d3r.com>
+     */
+    public function testHashSpaceToString()
+    {
+        $mockHasher = new MockHasher();
+        $hashSpace = new Flexihash($mockHasher, 1);
+        $hashSpace->addTarget('t1');
+        $hashSpace->addTarget('t2');
+
+        $this->assertSame(
+            $hashSpace->__toString(),
+            "Flexihash{targets:[t1,t2]}"
         );
     }
 }
