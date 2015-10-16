@@ -1,5 +1,5 @@
 {
-    "name": "dmnc/flexihash",
+    "name": "flexihash/flexihash",
     "description": "Flexihash is a small PHP library which implements consistent hashing",
     "homepage": "https://github.com/dmnc/flexihash",
     "license": "MIT",
