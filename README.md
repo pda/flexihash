@@ -21,8 +21,6 @@ or in your `composer.json`
 ##Usage
 
 ```php
-&lt;?php
-
 $hash = new Flexihash();
 
 // bulk add
