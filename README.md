@@ -1,13 +1,26 @@
 #Flexihash
-[![Build Status](https://travis-ci.org/dmnc/flexihash.svg?branch=master)](https://travis-ci.org/dmnc/flexihash) [![Coverage Status](https://coveralls.io/repos/dmnc/flexihash/badge.svg?branch=master&service=github)](https://coveralls.io/github/dmnc/flexihash?branch=master)
+[![Build Status](https://travis-ci.org/pda/flexihash.svg?branch=master)](https://travis-ci.org/pda/flexihash) [![Coverage Status](https://coveralls.io/repos/pda/flexihash/badge.svg?branch=master&service=github)](https://coveralls.io/github/pda/flexihash?branch=master)
 
-Flexihash is a small PHP library which implements [consistent hashing](http://en.wikipedia.org/wiki/Consistent_hashing), which is most useful in distributed caching.  It requires PHP5 and uses [SimpleTest](http://simpletest.org/) for unit testing.
+Flexihash is a small PHP library which implements [consistent hashing](http://en.wikipedia.org/wiki/Consistent_hashing), which is most useful in distributed caching. It requires PHP5 and uses [PHPUnit](http://simpletest.org/) for unit testing.
 
-This is a fork from PDA's [flexihash](https://github.com/pda/flexihash) created to add composer support and meet PSR standards.
+##Installation
 
-##Usage Example
+[Composer](https://getcomposer.org/) is the recommended installation technique. You can find flexihash on [Packagist](https://packagist.org/packages/flexihash/flexihash) so installation is as easy as
+```
+composer require flexihash/flexihash
+```
+or in your `composer.json`
+```json
+{
+    "require": {
+        "flexihash/flexihash": "^1.0.0"
+    }
+}
+```
 
-<pre>
+##Usage
+
+```php
 &lt;?php
 
 $hash = new Flexihash();
@@ -30,18 +43,7 @@ $hash->lookupList('object', 2); // ["cache-2", "cache-4"]
 // remove cache-2, expect object to hash to cache-4
 $hash->removeTarget('cache-2');
 $hash->lookup('object'); // "cache-4"
-</pre>
-
-
-##Roadmap
-- [ ] v1 Initial packagist release
-  - [x] Composer support
-  - [ ] PSR2
-- [ ] v2 API breaking refactor
-  - [x] Migrate tests to PHPUnit
-  - [ ] Introduce namespacing
-  - [ ] PSR4 autoloading
-  - [x] Automated testing
+```
 
 ##Further Reading
 
