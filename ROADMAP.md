@@ -11,7 +11,7 @@ This maintains the historical API but allows for composer autoloading.
 ##v2.0.0
 The historical API will be broken by classname changes.
 
-- [ ] Introduce namespacing.
-- [ ] PSR4 autoloading.
+- [x] Introduce namespacing.
+- [x] PSR4 autoloading.
 - [x] Automated testing.
-- [ ] PHP 5.4 minimum.
+- [x] PHP 5.4 minimum.

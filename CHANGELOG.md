@@ -5,9 +5,19 @@ which adheres to the guidelines at http://keepachangelog.com/.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [2.0.0]
 ### Added
 - This CHANGELOG.md file.
 - A ROADMAP.md file.
+- PSR-4 autoloading.
+- Introduce namespacing.
+- Full PSR-2 support.
+
+### Changed
+- Reorganisation of files.
+
+### Removed
+- PHP<5.4 support
 
 ### Changed
 - Updated readme to reflect composer installation recommendation.
