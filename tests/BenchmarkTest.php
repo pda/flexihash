@@ -1,13 +1,20 @@
 <?php
 
+namespace Flexihash\Tests;
+
+use PHPUnit_Framework_TestCase;
+use Flexihash\Flexihash;
+use Flexihash\Hasher\Crc32Hasher;
+use Flexihash\Hasher\Md5Hasher;
+
 /**
  * Benchmarks, not really tests.
  *
  * @author Paul Annesley
  * @group benchmark
- * @licence http://www.opensource.org/licenses/mit-license.php
+ * @license http://www.opensource.org/licenses/mit-license.php
  */
-class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
+class BenchmarkTest extends PHPUnit_Framework_TestCase
 {
     private $targets = 10;
     private $lookups = 1000;
@@ -19,12 +26,12 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
 
     public function testAddTargetWithNonConsistentHash()
     {
-        $results1 = array();
+        $results1 = [];
         foreach (range(1, $this->lookups) as $i) {
             $results1[$i] = $this->basicHash("t$i", 10);
         }
 
-        $results2 = array();
+        $results2 = [];
         foreach (range(1, $this->lookups) as $i) {
             $results2[$i] = $this->basicHash("t$i", 11);
         }
@@ -44,12 +51,12 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
 
     public function testRemoveTargetWithNonConsistentHash()
     {
-        $results1 = array();
+        $results1 = [];
         foreach (range(1, $this->lookups) as $i) {
             $results1[$i] = $this->basicHash("t$i", 10);
         }
 
-        $results2 = array();
+        $results2 = [];
         foreach (range(1, $this->lookups) as $i) {
             $results2[$i] = $this->basicHash("t$i", 9);
         }
@@ -70,20 +77,20 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
     public function testHopeAddingTargetDoesNotChangeMuchWithCrc32Hasher()
     {
         $hashSpace = new Flexihash(
-            new Flexihash_Crc32Hasher()
+            new Crc32Hasher()
         );
         foreach (range(1, $this->targets) as $i) {
             $hashSpace->addTarget("target$i");
         }
 
-        $results1 = array();
+        $results1 = [];
         foreach (range(1, $this->lookups) as $i) {
             $results1[$i] = $hashSpace->lookup("t$i");
         }
 
         $hashSpace->addTarget('target-new');
 
-        $results2 = array();
+        $results2 = [];
         foreach (range(1, $this->lookups) as $i) {
             $results2[$i] = $hashSpace->lookup("t$i");
         }
@@ -104,20 +111,20 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
     public function testHopeRemovingTargetDoesNotChangeMuchWithCrc32Hasher()
     {
         $hashSpace = new Flexihash(
-            new Flexihash_Crc32Hasher()
+            new Crc32Hasher()
         );
         foreach (range(1, $this->targets) as $i) {
             $hashSpace->addTarget("target$i");
         }
 
-        $results1 = array();
+        $results1 = [];
         foreach (range(1, $this->lookups) as $i) {
             $results1[$i] = $hashSpace->lookup("t$i");
         }
 
         $hashSpace->removeTarget('target1');
 
-        $results2 = array();
+        $results2 = [];
         foreach (range(1, $this->lookups) as $i) {
             $results2[$i] = $hashSpace->lookup("t$i");
         }
@@ -138,19 +145,19 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
     public function testHashDistributionWithCrc32Hasher()
     {
         $hashSpace = new Flexihash(
-            new Flexihash_Crc32Hasher()
+            new Crc32Hasher()
         );
 
         foreach (range(1, $this->targets) as $i) {
             $hashSpace->addTarget("target$i");
         }
 
-        $results = array();
+        $results = [];
         foreach (range(1, $this->lookups) as $i) {
             $results[$i] = $hashSpace->lookup("t$i");
         }
 
-        $distribution = array();
+        $distribution = [];
         foreach ($hashSpace->getAllTargets() as $target) {
             $distribution[$target] = count(array_keys($results, $target));
         }
@@ -169,8 +176,8 @@ class Flexihash_BenchmarkTest extends PHPUnit_Framework_TestCase
     {
         $hashCount = 100000;
 
-        $md5Hasher = new Flexihash_Md5Hasher();
-        $crc32Hasher = new Flexihash_Crc32Hasher();
+        $md5Hasher = new Md5Hasher();
+        $crc32Hasher = new Crc32Hasher();
 
         $start = microtime(true);
         for ($i = 0; $i < $hashCount; ++$i) {

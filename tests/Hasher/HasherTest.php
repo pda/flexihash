@@ -1,14 +1,20 @@
 <?php
 
+namespace Flexihash\Tests\Hasher;
+
+use PHPUnit_Framework_TestCase;
+use Flexihash\Hasher\Crc32Hasher;
+use Flexihash\Hasher\Md5Hasher;
+
 /**
  * @author Paul Annesley
- * @licence http://www.opensource.org/licenses/mit-license.php
+ * @license http://www.opensource.org/licenses/mit-license.php
  */
-class Flexihash_HasherTest extends PHPUnit_Framework_TestCase
+class HasherTest extends PHPUnit_Framework_TestCase
 {
     public function testCrc32Hash()
     {
-        $hasher = new Flexihash_Crc32Hasher();
+        $hasher = new Crc32Hasher();
         $result1 = $hasher->hash('test');
         $result2 = $hasher->hash('test');
         $result3 = $hasher->hash('different');
@@ -19,7 +25,7 @@ class Flexihash_HasherTest extends PHPUnit_Framework_TestCase
 
     public function testMd5Hash()
     {
-        $hasher = new Flexihash_Md5Hasher();
+        $hasher = new Md5Hasher();
         $result1 = $hasher->hash('test');
         $result2 = $hasher->hash('test');
         $result3 = $hasher->hash('different');

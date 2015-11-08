@@ -1,22 +1,28 @@
 <?php
 
+namespace Flexihash\Tests;
+
+use PHPUnit_Framework_TestCase;
+use Flexihash\Flexihash;
+use Flexihash\Tests\Hasher\MockHasher;
+
 /**
  * @author Paul Annesley
- * @licence http://www.opensource.org/licenses/mit-license.php
+ * @license http://www.opensource.org/licenses/mit-license.php
  */
 class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
 {
     public function testGetAllTargetsEmpty()
     {
         $hashSpace = new Flexihash();
-        $this->assertEquals($hashSpace->getAllTargets(), array());
+        $this->assertEquals($hashSpace->getAllTargets(), []);
     }
 
     public function testAddTargetThrowsExceptionOnDuplicateTarget()
     {
         $hashSpace = new Flexihash();
         $hashSpace->addTarget('t-a');
-        $this->setExpectedException('Flexihash_Exception');
+        $this->setExpectedException('Flexihash\Exception');
         $hashSpace->addTarget('t-a');
     }
 
@@ -29,12 +35,12 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
             ->addTarget('t-c')
             ;
 
-        $this->assertEquals($hashSpace->getAllTargets(), array('t-a', 't-b', 't-c'));
+        $this->assertEquals($hashSpace->getAllTargets(), ['t-a', 't-b', 't-c']);
     }
 
     public function testAddTargetsAndGetAllTargets()
     {
-        $targets = array('t-a', 't-b', 't-c');
+        $targets = ['t-a', 't-b', 't-c'];
 
         $hashSpace = new Flexihash();
         $hashSpace->addTargets($targets);
@@ -50,13 +56,13 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
             ->addTarget('t-c')
             ->removeTarget('t-b')
             ;
-        $this->assertEquals($hashSpace->getAllTargets(), array('t-a', 't-c'));
+        $this->assertEquals($hashSpace->getAllTargets(), ['t-a', 't-c']);
     }
 
     public function testRemoveTargetFailsOnMissingTarget()
     {
         $hashSpace = new Flexihash();
-        $this->setExpectedException('Flexihash_Exception');
+        $this->setExpectedException('Flexihash\Exception');
         $hashSpace->removeTarget('not-there');
     }
 
@@ -83,7 +89,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        Flexihash_Exception
+     * @expectedException        Flexihash\Exception
      * @expectedExceptionMessage No targets exist
      *
      * @author Dom Morgan <dom@d3r.com>
@@ -95,7 +101,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        Flexihash_Exception
+     * @expectedException        Flexihash\Exception
      * @expectedExceptionMessage Invalid count requested
      *
      * @author Dom Morgan <dom@d3r.com>
@@ -108,7 +114,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
 
     public function testHashSpaceLookupsAreValidTargets()
     {
-        $targets = array();
+        $targets = [];
         foreach (range(1, 10) as $i) {
             $targets [] = "target$i";
         }
@@ -131,7 +137,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
             $hashSpace->addTarget("target$i");
         }
 
-        $results1 = array();
+        $results1 = [];
         foreach (range(1, 100) as $i) {
             $results1 [] = $hashSpace->lookup("t$i");
         }
@@ -143,7 +149,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
             ->removeTarget('new-target')
             ;
 
-        $results2 = array();
+        $results2 = [];
         foreach (range(1, 100) as $i) {
             $results2 [] = $hashSpace->lookup("t$i");
         }
@@ -159,7 +165,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
         foreach (range(1, 10) as $i) {
             $hashSpace1->addTarget("target$i");
         }
-        $results1 = array();
+        $results1 = [];
         foreach (range(1, 100) as $i) {
             $results1 [] = $hashSpace1->lookup("t$i");
         }
@@ -168,7 +174,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
         foreach (range(1, 10) as $i) {
             $hashSpace2->addTarget("target$i");
         }
-        $results2 = array();
+        $results2 = [];
         foreach (range(1, 100) as $i) {
             $results2 [] = $hashSpace2->lookup("t$i");
         }
@@ -238,7 +244,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
         $mockHasher->setHashValue(35);
         $targets = $hashSpace->lookupList('resource', 4);
 
-        $this->assertEquals($targets, array('t4', 't5', 't1', 't2'));
+        $this->assertEquals($targets, ['t4', 't5', 't1', 't2']);
     }
 
     public function testGetMultipleTargetsWithoutGettingAnyBeforeLoopToStart()
@@ -258,7 +264,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
         $mockHasher->setHashValue(100);
         $targets = $hashSpace->lookupList('resource', 2);
 
-        $this->assertEquals($targets, array('t1', 't2'));
+        $this->assertEquals($targets, ['t1', 't2']);
     }
 
     public function testGetMultipleTargetsWithoutNeedingToLoopToStart()
@@ -278,7 +284,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
         $mockHasher->setHashValue(15);
         $targets = $hashSpace->lookupList('resource', 2);
 
-        $this->assertEquals($targets, array('t2', 't3'));
+        $this->assertEquals($targets, ['t2', 't3']);
     }
 
     public function testFallbackPrecedenceWhenServerRemoved()
@@ -300,7 +306,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($hashSpace->lookup('resource'), 't2');
         $this->assertEquals(
             $hashSpace->lookupList('resource', 3),
-            array('t2', 't3', 't1')
+            ['t2', 't3', 't1']
         );
 
         $hashSpace->removeTarget('t2');
@@ -308,7 +314,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($hashSpace->lookup('resource'), 't3');
         $this->assertEquals(
             $hashSpace->lookupList('resource', 3),
-            array('t3', 't1')
+            ['t3', 't1']
         );
 
         $hashSpace->removeTarget('t3');
@@ -316,12 +322,12 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($hashSpace->lookup('resource'), 't1');
         $this->assertEquals(
             $hashSpace->lookupList('resource', 3),
-            array('t1')
+            ['t1']
         );
     }
 
     /**
-     * Does the __toString method behave as we expect
+     * Does the __toString method behave as we expect.
      *
      * @author Dom Morgan <dom@d3r.com>
      */
@@ -334,22 +340,7 @@ class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $hashSpace->__toString(),
-            "Flexihash{targets:[t1,t2]}"
+            'Flexihash\Flexihash{targets:[t1,t2]}'
         );
-    }
-}
-
-class MockHasher implements Flexihash_Hasher
-{
-    private $hashValue;
-
-    public function setHashValue($hash)
-    {
-        $this->hashValue = $hash;
-    }
-
-    public function hash($value)
-    {
-        return $this->hashValue;
     }
 }
