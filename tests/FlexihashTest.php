@@ -10,7 +10,7 @@ use Flexihash\Tests\Hasher\MockHasher;
  * @author Paul Annesley
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class Flexihash_FlexihashTest extends PHPUnit_Framework_TestCase
+class FlexihashTest extends PHPUnit_Framework_TestCase
 {
     public function testGetAllTargetsEmpty()
     {
