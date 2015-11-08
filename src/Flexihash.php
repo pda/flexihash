@@ -1,10 +1,15 @@
 <?php
 
+namespace Flexihash;
+
+use Flexihash\Hasher\HasherInterface;
+use Flexihash\Hasher\Crc32Hasher;
+
 /**
  * A simple consistent hashing implementation with pluggable hash algorithms.
  *
  * @author Paul Annesley
- * @licence http://www.opensource.org/licenses/mit-license.php
+ * @license http://www.opensource.org/licenses/mit-license.php
  */
 class Flexihash
 {
@@ -31,13 +36,13 @@ class Flexihash
      * Internal map of positions (hash outputs) to targets.
      * @var array { position => target, ... }
      */
-    private $positionToTarget = array();
+    private $positionToTarget = [];
 
     /**
      * Internal map of targets to lists of positions that target is hashed to.
      * @var array { target => [ position, position, ... ], ... }
      */
-    private $targetToPositions = array();
+    private $targetToPositions = [];
 
     /**
      * Whether the internal map of positions to targets is already sorted.
@@ -47,12 +52,12 @@ class Flexihash
 
     /**
      * Constructor.
-     * @param object $hasher Flexihash_Hasher
+     * @param Flexihash\Hasher\HasherInterface $hasher
      * @param int $replicas Amount of positions to hash each target to.
      */
-    public function __construct(Flexihash_Hasher $hasher = null, $replicas = null)
+    public function __construct(HasherInterface $hasher = null, $replicas = null)
     {
-        $this->hasher = $hasher ? $hasher : new Flexihash_Crc32Hasher();
+        $this->hasher = $hasher ? $hasher : new Crc32Hasher();
         if (!empty($replicas)) {
             $this->replicas = $replicas;
         }
@@ -67,10 +72,10 @@ class Flexihash
     public function addTarget($target, $weight = 1)
     {
         if (isset($this->targetToPositions[$target])) {
-            throw new Flexihash_Exception("Target '$target' already exists.");
+            throw new Exception("Target '$target' already exists.");
         }
 
-        $this->targetToPositions[$target] = array();
+        $this->targetToPositions[$target] = [];
 
         // hash the target into multiple positions
         for ($i = 0; $i < round($this->replicas * $weight); ++$i) {
@@ -87,9 +92,10 @@ class Flexihash
 
     /**
      * Add a list of targets.
+     *
      * @param array $targets
      * @param float $weight
-     * @chainable
+     * @return self fluent
      */
     public function addTargets($targets, $weight = 1)
     {
@@ -102,13 +108,15 @@ class Flexihash
 
     /**
      * Remove a target.
+     *
      * @param string $target
-     * @chainable
+     * @return self fluent
+     * @throws Flexihash\Exception when target does not exist
      */
     public function removeTarget($target)
     {
         if (!isset($this->targetToPositions[$target])) {
-            throw new Flexihash_Exception("Target '$target' does not exist.");
+            throw new Exception("Target '$target' does not exist.");
         }
 
         foreach ($this->targetToPositions[$target] as $position) {
@@ -135,12 +143,13 @@ class Flexihash
      * Looks up the target for the given resource.
      * @param string $resource
      * @return string
+     * @throws Flexihash\Exception when no targets defined
      */
     public function lookup($resource)
     {
         $targets = $this->lookupList($resource, 1);
         if (empty($targets)) {
-            throw new Flexihash_Exception('No targets exist');
+            throw new Exception('No targets exist');
         }
 
         return $targets[0];
@@ -153,16 +162,17 @@ class Flexihash
      * @param string $resource
      * @param int $requestedCount The length of the list to return
      * @return array List of targets
+     * @throws Flexihash\Exception when count is invalid
      */
     public function lookupList($resource, $requestedCount)
     {
         if (!$requestedCount) {
-            throw new Flexihash_Exception('Invalid count requested');
+            throw new Exception('Invalid count requested');
         }
 
         // handle no targets
         if (empty($this->positionToTarget)) {
-            return array();
+            return [];
         }
 
         // optimize single target
@@ -173,7 +183,7 @@ class Flexihash
         // hash resource to a position
         $resourcePosition = $this->hasher->hash($resource);
 
-        $results = array();
+        $results = [];
         $collect = false;
 
         $this->sortPositionTargets();

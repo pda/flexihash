@@ -1,12 +1,14 @@
 <?php
 
+namespace Flexihash\Hasher;
+
 /**
  * Hashes given values into a sortable fixed size address space.
  *
  * @author Paul Annesley
- * @licence http://www.opensource.org/licenses/mit-license.php
+ * @license http://www.opensource.org/licenses/mit-license.php
  */
-interface Flexihash_Hasher
+interface HasherInterface
 {
     /**
      * Hashes the given string into a 32bit address space.

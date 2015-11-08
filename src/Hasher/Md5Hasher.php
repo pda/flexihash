@@ -1,16 +1,15 @@
 <?php
 
+namespace Flexihash\Hasher;
+
 /**
  * Uses MD5 to hash a value into a 32bit binary string data address space.
  *
  * @author Paul Annesley
- * @licence http://www.opensource.org/licenses/mit-license.php
+ * @license http://www.opensource.org/licenses/mit-license.php
  */
-class Flexihash_Md5Hasher implements Flexihash_Hasher
+class Md5Hasher implements HasherInterface
 {
-    /* (non-phpdoc)
-     * @see Flexihash_Hasher::hash()
-     */
     public function hash($string)
     {
         return substr(md5($string), 0, 8); // 8 hexits = 32bit
