@@ -1,7 +1,8 @@
 {
     "name": "flexihash/flexihash",
+    "type": "library",
     "description": "Flexihash is a small PHP library which implements consistent hashing",
-    "homepage": "https://github.com/dmnc/flexihash",
+    "homepage": "https://github.com/pda/flexihash",
     "license": "MIT",
     "authors": [
         {
@@ -11,7 +12,8 @@
         },
         {
             "name": "Dom Morgan",
-            "email": "dom@d3r.com"
+            "email": "dom@d3r.com",
+            "homepage": "https://d3r.com"
         }
     ],
     "require": {},
@@ -21,6 +23,13 @@
         "satooshi/php-coveralls": "~0.6"
     },
     "autoload": {
-        "psr-0": { "Flexihash": "src" }
+        "psr-4": {
+            "Flexihash\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Flexihash\\Tests\\": "tests/"
+        }
     }
 }
