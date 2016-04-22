@@ -5,6 +5,12 @@ which adheres to the guidelines at http://keepachangelog.com/.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [2.0.2] - 2016-04-22
+### Changed
+- Pinned symfony component version to pass tests on 5.4.x.
+- Updated coveralls config for new version.
+- Tweaked README.md to recommend install version 2.
+- Sorted phpcs errors.
 
 ## [2.0.1] - 2016-04-22
 ### Changed
@@ -42,7 +48,8 @@ due to PHP treating numeric string array keys as integers.
 Posterity release
 
 
-[Unreleased]: https://github.com/pda/flexihash/compare/v2.0.1...master
+[Unreleased]: https://github.com/pda/flexihash/compare/v2.0.2...master
+[2.0.2]: https://github.com/pda/flexihash/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/pda/flexihash/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/pda/flexihash/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/pda/flexihash/compare/v0.1.0...v1.0.0
