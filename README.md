@@ -13,7 +13,7 @@ or in your `composer.json`
 ```json
 {
     "require": {
-        "flexihash/flexihash": "^1.0.0"
+        "flexihash/flexihash": "^2.0.0"
     }
 }
 ```
