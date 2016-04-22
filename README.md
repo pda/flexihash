@@ -1,5 +1,5 @@
 #Flexihash
-[![Build Status](https://travis-ci.org/pda/flexihash.svg?branch=master)](https://travis-ci.org/pda/flexihash) [![Coverage Status](https://coveralls.io/repos/pda/flexihash/badge.svg?branch=master&service=github)](https://coveralls.io/github/pda/flexihash?branch=master)
+[![Build Status](https://travis-ci.org/pda/flexihash.svg?branch=master)](https://travis-ci.org/pda/flexihash) [![Coverage Status](https://coveralls.io/repos/github/pda/flexihash/badge.svg?branch=master)](https://coveralls.io/github/pda/flexihash?branch=master)
 
 Flexihash is a small PHP library which implements [consistent hashing](http://en.wikipedia.org/wiki/Consistent_hashing), which is most useful in distributed caching. It requires PHP5 and uses [PHPUnit](http://simpletest.org/) for unit testing.
 

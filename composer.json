@@ -23,7 +23,11 @@
         "phpunit/phpunit": "^4.8",
         "squizlabs/php_codesniffer": "^2.3",
         "satooshi/php-coveralls": "~1.0",
-        "symfony/config": "^2.0.0"
+        "symfony/config": "^2.0.0",
+        "symfony/console": "^2.0.0",
+        "symfony/filesystem": "^2.0.0",
+        "symfony/stopwatch": "^2.0.0",
+        "symfony/yaml": "^2.0.0"
     },
     "autoload": {
         "psr-4": {
