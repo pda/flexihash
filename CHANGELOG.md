@@ -5,7 +5,13 @@ which adheres to the guidelines at http://keepachangelog.com/.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-## [2.0.0]
+
+## [2.0.1] - 2016-04-22
+### Changed
+- Make MD5 hasher return an integer to prevent incorrect remapping
+due to PHP treating numeric string array keys as integers.
+
+## [2.0.0] - 2015-10-08
 ### Added
 - This CHANGELOG.md file.
 - A ROADMAP.md file.
@@ -15,12 +21,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Reorganisation of files.
+- Updated readme to reflect composer installation recommendation.
 
 ### Removed
 - PHP<5.4 support
-
-### Changed
-- Updated readme to reflect composer installation recommendation.
 
 ## [1.0.0] - 2015-10-16
 ### Added
@@ -38,7 +42,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 Posterity release
 
 
-[Unreleased]: https://github.com/pda/flexihash/compare/v2.0.0...master
+[Unreleased]: https://github.com/pda/flexihash/compare/v2.0.1...master
+[2.0.0]: https://github.com/pda/flexihash/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/pda/flexihash/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/pda/flexihash/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/pda/flexihash/tree/v0.1.0
