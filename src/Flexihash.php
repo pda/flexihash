@@ -52,7 +52,7 @@ class Flexihash
 
     /**
      * Constructor.
-     * @param Flexihash\Hasher\HasherInterface $hasher
+     * @param \Flexihash\Hasher\HasherInterface $hasher
      * @param int $replicas Amount of positions to hash each target to.
      */
     public function __construct(HasherInterface $hasher = null, $replicas = null)
@@ -111,7 +111,7 @@ class Flexihash
      *
      * @param string $target
      * @return self fluent
-     * @throws Flexihash\Exception when target does not exist
+     * @throws \Flexihash\Exception when target does not exist
      */
     public function removeTarget($target)
     {
@@ -143,7 +143,7 @@ class Flexihash
      * Looks up the target for the given resource.
      * @param string $resource
      * @return string
-     * @throws Flexihash\Exception when no targets defined
+     * @throws \Flexihash\Exception when no targets defined
      */
     public function lookup($resource)
     {
@@ -162,7 +162,7 @@ class Flexihash
      * @param string $resource
      * @param int $requestedCount The length of the list to return
      * @return array List of targets
-     * @throws Flexihash\Exception when count is invalid
+     * @throws \Flexihash\Exception when count is invalid
      */
     public function lookupList($resource, $requestedCount)
     {
