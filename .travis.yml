@@ -28,6 +28,7 @@ script:
 after_script:
   - sh -c "if [ '$COVERALLS' = '1' ]; then vendor/bin/coveralls ; fi"
 
+
 notifications:
     on_success: never
     on_failure: always
