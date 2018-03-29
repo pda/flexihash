@@ -1,9 +1,9 @@
-#Flexihash
+# Flexihash
 [![Build Status](https://travis-ci.org/pda/flexihash.svg?branch=master)](https://travis-ci.org/pda/flexihash) [![Coverage Status](https://coveralls.io/repos/github/pda/flexihash/badge.svg?branch=master)](https://coveralls.io/github/pda/flexihash?branch=master)
 
 Flexihash is a small PHP library which implements [consistent hashing](http://en.wikipedia.org/wiki/Consistent_hashing), which is most useful in distributed caching. It requires PHP5 and uses [PHPUnit](http://simpletest.org/) for unit testing.
 
-##Installation
+## Installation
 
 [Composer](https://getcomposer.org/) is the recommended installation technique. You can find flexihash on [Packagist](https://packagist.org/packages/flexihash/flexihash) so installation is as easy as
 ```
@@ -18,7 +18,7 @@ or in your `composer.json`
 }
 ```
 
-##Usage
+## Usage
 
 ```php
 $hash = new Flexihash();
@@ -43,7 +43,7 @@ $hash->removeTarget('cache-2');
 $hash->lookup('object'); // "cache-4"
 ```
 
-##Further Reading
+## Further Reading
 
   * http://www.spiteful.com/2008/03/17/programmers-toolbox-part-3-consistent-hashing/
   * http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html
