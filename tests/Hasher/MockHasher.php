@@ -13,7 +13,7 @@ class MockHasher implements HasherInterface
 {
     private $hashValue;
 
-    public function setHashValue($hash):void
+    public function setHashValue($hash): void
     {
         $this->hashValue = $hash;
     }

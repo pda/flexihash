@@ -19,12 +19,12 @@ class BenchmarkTest extends \PHPUnit\Framework\TestCase
     private $targets = 10;
     private $lookups = 1000;
 
-    public function dump($message):void
+    public function dump($message): void
     {
         echo $message."\n";
     }
 
-    public function testAddTargetWithNonConsistentHash():void
+    public function testAddTargetWithNonConsistentHash(): void
     {
         $results1 = [];
         foreach (range(1, $this->lookups) as $i) {
@@ -49,7 +49,7 @@ class BenchmarkTest extends \PHPUnit\Framework\TestCase
             "after adding a target to the existing {$this->targets}");
     }
 
-    public function testRemoveTargetWithNonConsistentHash():void
+    public function testRemoveTargetWithNonConsistentHash(): void
     {
         $results1 = [];
         foreach (range(1, $this->lookups) as $i) {
@@ -74,7 +74,7 @@ class BenchmarkTest extends \PHPUnit\Framework\TestCase
             "after removing 1 of {$this->targets} targets");
     }
 
-    public function testHopeAddingTargetDoesNotChangeMuchWithCrc32Hasher():void
+    public function testHopeAddingTargetDoesNotChangeMuchWithCrc32Hasher(): void
     {
         $hashSpace = new Flexihash(
             new Crc32Hasher()
@@ -108,7 +108,7 @@ class BenchmarkTest extends \PHPUnit\Framework\TestCase
             "after adding a target to the existing {$this->targets}");
     }
 
-    public function testHopeRemovingTargetDoesNotChangeMuchWithCrc32Hasher():void
+    public function testHopeRemovingTargetDoesNotChangeMuchWithCrc32Hasher(): void
     {
         $hashSpace = new Flexihash(
             new Crc32Hasher()
@@ -142,7 +142,7 @@ class BenchmarkTest extends \PHPUnit\Framework\TestCase
             "after removing 1 of {$this->targets} targets");
     }
 
-    public function testHashDistributionWithCrc32Hasher():void
+    public function testHashDistributionWithCrc32Hasher(): void
     {
         $hashSpace = new Flexihash(
             new Crc32Hasher()
@@ -172,7 +172,7 @@ class BenchmarkTest extends \PHPUnit\Framework\TestCase
         ));
     }
 
-    public function testHasherSpeed():void
+    public function testHasherSpeed(): void
     {
         $hashCount = 100000;
 
