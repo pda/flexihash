@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Flexihash\Tests\Hasher;
 
@@ -11,7 +12,7 @@ use Flexihash\Hasher\Md5Hasher;
  */
 class HasherTest extends \PHPUnit\Framework\TestCase
 {
-    public function testCrc32Hash()
+    public function testCrc32Hash():void
     {
         $hasher = new Crc32Hasher();
         $result1 = $hasher->hash('test');
@@ -22,7 +23,7 @@ class HasherTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEquals($result1, $result3); // fragile but worthwhile
     }
 
-    public function testMd5Hash()
+    public function testMd5Hash():void
     {
         $hasher = new Md5Hasher();
         $result1 = $hasher->hash('test');

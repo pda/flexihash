@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Flexihash\Tests\Hasher;
 
@@ -12,7 +13,7 @@ class MockHasher implements HasherInterface
 {
     private $hashValue;
 
-    public function setHashValue($hash)
+    public function setHashValue($hash):void
     {
         $this->hashValue = $hash;
     }

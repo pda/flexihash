@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Flexihash\Hasher;
 
@@ -11,7 +12,7 @@ namespace Flexihash\Hasher;
  */
 class Crc32Hasher implements HasherInterface
 {
-    public function hash($string)
+    public function hash($string):int
     {
         return crc32($string);
     }
