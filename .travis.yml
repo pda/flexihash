@@ -10,8 +10,12 @@ matrix:
         - php: 5.4
         - php: 5.5
         - php: 5.6
-          env: COVERALLS=1 PHPCS=1
         - php: 7
+        - php: 7.1
+        - php: 7.2
+        - php: 7.3
+        - php: 7.4
+          env: COVERALLS=1 PHPCS=1
         - php: hhvm
 
     allow_failures:
