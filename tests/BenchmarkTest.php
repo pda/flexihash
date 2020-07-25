@@ -2,7 +2,6 @@
 
 namespace Flexihash\Tests;
 
-use PHPUnit_Framework_TestCase;
 use Flexihash\Flexihash;
 use Flexihash\Hasher\Crc32Hasher;
 use Flexihash\Hasher\Md5Hasher;
@@ -14,7 +13,7 @@ use Flexihash\Hasher\Md5Hasher;
  * @group benchmark
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class BenchmarkTest extends PHPUnit_Framework_TestCase
+class BenchmarkTest extends \PHPUnit\Framework\TestCase
 {
     private $targets = 10;
     private $lookups = 1000;
