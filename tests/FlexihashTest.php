@@ -2,6 +2,7 @@
 
 namespace Flexihash\Tests;
 
+use Flexihash\Exception;
 use Flexihash\Flexihash;
 use Flexihash\Tests\Hasher\MockHasher;
 
@@ -87,26 +88,18 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($hashSpace->lookupList('t1', 2));
     }
 
-    /**
-     * @expectedException        Flexihash\Exception
-     * @expectedExceptionMessage No targets exist
-     *
-     * @author Dom Morgan <dom@d3r.com>
-     */
     public function testHashSpaceLookupListNoTargets()
     {
+        $this->expectException('Flexihash\Exception');
+        $this->expectExceptionMessage('No targets exist');
         $hashSpace = new Flexihash();
         $hashSpace->lookup('t1');
     }
 
-    /**
-     * @expectedException        Flexihash\Exception
-     * @expectedExceptionMessage Invalid count requested
-     *
-     * @author Dom Morgan <dom@d3r.com>
-     */
     public function testHashSpaceLookupListNo()
     {
+        $this->expectException('Flexihash\Exception');
+        $this->expectExceptionMessage('Invalid count requested');
         $hashSpace = new Flexihash();
         $hashSpace->lookupList('t1', 0);
     }
@@ -190,7 +183,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
 
         $targets = $hashSpace->lookupList('resource', 2);
 
-        $this->assertInternalType('array', $targets);
+        $this->assertIsArray($targets);
         $this->assertEquals(count($targets), 2);
         $this->assertNotEquals($targets[0], $targets[1]);
     }
@@ -202,7 +195,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
 
         $targets = $hashSpace->lookupList('resource', 2);
 
-        $this->assertInternalType('array', $targets);
+        $this->assertIsArray($targets);
         $this->assertEquals(count($targets), 1);
         $this->assertEquals($targets[0], 'single-target');
     }
@@ -215,7 +208,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
 
         $targets = $hashSpace->lookupList('resource', 4);
 
-        $this->assertInternalType('array', $targets);
+        $this->assertIsArray($targets);
         $this->assertEquals(count($targets), 2);
         $this->assertNotEquals($targets[0], $targets[1]);
     }
