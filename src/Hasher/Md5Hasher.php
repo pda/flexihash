@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Flexihash\Hasher;
 
@@ -21,7 +22,7 @@ class Md5Hasher implements HasherInterface
      * sorting order.
      *
      * @param  string $string
-     * @return int
+     * @return int | float
      * @author Dom Morgan <dom@d3r.com>
      */
     public function hash($string)

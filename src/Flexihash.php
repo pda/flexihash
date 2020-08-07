@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Flexihash;
 
@@ -134,7 +135,7 @@ class Flexihash
      * A list of all potential targets.
      * @return array
      */
-    public function getAllTargets()
+    public function getAllTargets(): array
     {
         return array_keys($this->targetToPositions);
     }
@@ -145,7 +146,7 @@ class Flexihash
      * @return string
      * @throws \Flexihash\Exception when no targets defined
      */
-    public function lookup($resource)
+    public function lookup($resource): string
     {
         $targets = $this->lookupList($resource, 1);
         if (empty($targets)) {
@@ -164,7 +165,7 @@ class Flexihash
      * @return array List of targets
      * @throws \Flexihash\Exception when count is invalid
      */
-    public function lookupList($resource, $requestedCount)
+    public function lookupList($resource, $requestedCount): array
     {
         if (!$requestedCount) {
             throw new Exception('Invalid count requested');
@@ -222,7 +223,7 @@ class Flexihash
         return $results;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf(
             '%s{targets:[%s]}',
