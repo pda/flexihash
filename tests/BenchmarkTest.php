@@ -1,8 +1,8 @@
 <?php
+declare(strict_types=1);
 
 namespace Flexihash\Tests;
 
-use PHPUnit_Framework_TestCase;
 use Flexihash\Flexihash;
 use Flexihash\Hasher\Crc32Hasher;
 use Flexihash\Hasher\Md5Hasher;
@@ -14,17 +14,17 @@ use Flexihash\Hasher\Md5Hasher;
  * @group benchmark
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class BenchmarkTest extends PHPUnit_Framework_TestCase
+class BenchmarkTest extends \PHPUnit\Framework\TestCase
 {
     private $targets = 10;
     private $lookups = 1000;
 
-    public function dump($message)
+    public function dump($message): void
     {
         echo $message."\n";
     }
 
-    public function testAddTargetWithNonConsistentHash()
+    public function testAddTargetWithNonConsistentHash(): void
     {
         $results1 = [];
         foreach (range(1, $this->lookups) as $i) {
@@ -49,7 +49,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
             "after adding a target to the existing {$this->targets}");
     }
 
-    public function testRemoveTargetWithNonConsistentHash()
+    public function testRemoveTargetWithNonConsistentHash(): void
     {
         $results1 = [];
         foreach (range(1, $this->lookups) as $i) {
@@ -74,7 +74,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
             "after removing 1 of {$this->targets} targets");
     }
 
-    public function testHopeAddingTargetDoesNotChangeMuchWithCrc32Hasher()
+    public function testHopeAddingTargetDoesNotChangeMuchWithCrc32Hasher(): void
     {
         $hashSpace = new Flexihash(
             new Crc32Hasher()
@@ -108,7 +108,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
             "after adding a target to the existing {$this->targets}");
     }
 
-    public function testHopeRemovingTargetDoesNotChangeMuchWithCrc32Hasher()
+    public function testHopeRemovingTargetDoesNotChangeMuchWithCrc32Hasher(): void
     {
         $hashSpace = new Flexihash(
             new Crc32Hasher()
@@ -142,7 +142,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
             "after removing 1 of {$this->targets} targets");
     }
 
-    public function testHashDistributionWithCrc32Hasher()
+    public function testHashDistributionWithCrc32Hasher(): void
     {
         $hashSpace = new Flexihash(
             new Crc32Hasher()
@@ -172,7 +172,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
         ));
     }
 
-    public function testHasherSpeed()
+    public function testHasherSpeed(): void
     {
         $hashCount = 100000;
 
@@ -201,7 +201,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
 
     // ----------------------------------------
 
-    private function basicHash($value, $targets)
+    private function basicHash($value, $targets):int
     {
         return abs(crc32($value) % $targets);
     }
@@ -210,7 +210,7 @@ class BenchmarkTest extends PHPUnit_Framework_TestCase
      * @param array $array list of numeric values
      * @return numeric
      */
-    private function median($values)
+    private function median($values):int
     {
         $values = array_values($values);
         sort($values);
