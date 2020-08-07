@@ -19,7 +19,7 @@ or in your `composer.json`
 }
 ```
 
-##Usage
+## Usage
 
 ```php
 $hash = new Flexihash();
