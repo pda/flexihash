@@ -44,6 +44,20 @@ $hash->removeTarget('cache-2');
 $hash->lookup('object'); // "cache-4"
 ```
 
+## Tests
+
+### Unit Test
+
+```
+% vendor/bin/phpunit
+```
+
+### Benchmark Test
+
+```
+% vendor/bin/phpunit tests/BenchmarkTest.php
+```
+
 ## Further Reading
 
   * http://www.spiteful.com/2008/03/17/programmers-toolbox-part-3-consistent-hashing/
