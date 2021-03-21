@@ -4,12 +4,16 @@ env:
   global:
     - COVERALLS=0
     - PHPCS=0
+  matrix:
+    - DEPENDENCIES=""
+    - DEPENDENCIES="--prefer-lowest --prefer-stable"
 
 matrix:
     include:
         - php: 7.2
         - php: 7.3
         - php: 7.4
+        - php: 8.0
           env: COVERALLS=1 PHPCS=1
         - php: hhvm
         - php: nightly
@@ -20,7 +24,8 @@ matrix:
     fast_finish: true
 
 before_script:
-  - composer install --no-interaction --prefer-source --dev
+  - composer self-update
+  - composer update $DEPENDENCIES
 
 script:
   - sh -c "if [ '$COVERALLS' = '1' ]; then ./vendor/bin/phpunit --coverage-clover clover.xml ; else ./vendor/bin/phpunit ; fi"
