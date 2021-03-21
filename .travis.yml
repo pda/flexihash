@@ -10,6 +10,7 @@ matrix:
         - php: 7.2
         - php: 7.3
         - php: 7.4
+        - php: 8.0
           env: COVERALLS=1 PHPCS=1
         - php: hhvm
         - php: nightly
