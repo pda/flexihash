@@ -52,6 +52,20 @@ class Flexihash
     private $positionToTargetSorted = false;
 
     /**
+     * Sorted positions.
+     *
+     * @var array
+     */
+    private $sortedPositions = [];
+
+    /**
+     * Internal counter for current number of positions.
+     *
+     * @var integer
+     */
+    private $positionCount = 0;
+
+    /**
      * Constructor.
      * @param \Flexihash\Hasher\HasherInterface $hasher
      * @param int $replicas Amount of positions to hash each target to.
@@ -126,6 +140,7 @@ class Flexihash
 
         unset($this->targetToPositions[$target]);
 
+        $this->positionToTargetSorted = false;
         --$this->targetCount;
 
         return $this;
@@ -185,42 +200,46 @@ class Flexihash
         $resourcePosition = $this->hasher->hash($resource);
 
         $results = [];
-        $collect = false;
 
         $this->sortPositionTargets();
 
-        // search values above the resourcePosition
-        foreach ($this->positionToTarget as $key => $value) {
-            // start collecting targets after passing resource position
-            if (!$collect && $key > $resourcePosition) {
-                $collect = true;
-            }
+        $positions = $this->sortedPositions;
+        $low = 0;
+        $high = $this->positionCount - 1;
+        $notfound = false;
 
-            // only collect the first instance of any target
-            if ($collect && !in_array($value, $results)) {
-                $results [] = $value;
-            }
+        // binary search of the first position greater than resource position
+        while ($high >= $low || $notfound = true) {
+            $probe = (int) floor(($high + $low) / 2);
 
-            // return when enough results, or list exhausted
-            if (count($results) == $requestedCount || count($results) == $this->targetCount) {
-                return $results;
+            if ($notfound === false && $positions[$probe] <= $resourcePosition) {
+                $low = $probe + 1;
+            } elseif ($probe === 0 || $resourcePosition > $positions[$probe - 1] || $notfound === true) {
+                if ($notfound) {
+                    // if not found is true, it means binary search failed to find any position greater
+                    // than ressource position, in this case, the last position is the bigest lower
+                    // position and first position is the next one after cycle
+                    $probe = 0;
+                }
+
+                $results[] = $this->positionToTarget[$positions[$probe]];
+
+                if ($requestedCount > 1) {
+                    for ($i = $requestedCount - 1; $i > 0; --$i) {
+                        if (++$probe > $this->positionCount - 1) {
+                            $probe = 0; // cycle
+                        }
+                        $results[] = $this->positionToTarget[$positions[$probe]];
+                    }
+                }
+
+                break;
+            } else {
+                $high = $probe - 1;
             }
         }
 
-        // loop to start - search values below the resourcePosition
-        foreach ($this->positionToTarget as $key => $value) {
-            if (!in_array($value, $results)) {
-                $results [] = $value;
-            }
-
-            // return when enough results, or list exhausted
-            if (count($results) == $requestedCount || count($results) == $this->targetCount) {
-                return $results;
-            }
-        }
-
-        // return results after iterating through both "parts"
-        return $results;
+        return array_unique($results);
     }
 
     public function __toString(): string
@@ -244,6 +263,8 @@ class Flexihash
         if (!$this->positionToTargetSorted) {
             ksort($this->positionToTarget, SORT_REGULAR);
             $this->positionToTargetSorted = true;
+            $this->sortedPositions = array_keys($this->positionToTarget);
+            $this->positionCount = count($this->sortedPositions);
         }
     }
 }
