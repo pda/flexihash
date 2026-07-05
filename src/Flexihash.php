@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Flexihash;
 
-use Flexihash\Hasher\HasherInterface;
 use Flexihash\Hasher\Crc32Hasher;
+use Flexihash\Hasher\HasherInterface;
 
 /**
  * A simple consistent hashing implementation with pluggable hash algorithms.
@@ -16,63 +17,57 @@ class Flexihash
 {
     /**
      * The number of positions to hash each target to.
-     *
-     * @var int
      */
-    private $replicas = 64;
+    private int $replicas = 64;
 
     /**
-     * The hash algorithm, encapsulated in a Flexihash_Hasher implementation.
-     * @var object Flexihash_Hasher
+     * The hash algorithm, encapsulated in a HasherInterface implementation.
      */
-    private $hasher;
+    private HasherInterface $hasher;
 
     /**
      * Internal counter for current number of targets.
-     * @var int
      */
-    private $targetCount = 0;
+    private int $targetCount = 0;
 
     /**
      * Internal map of positions (hash outputs) to targets.
-     * @var array { position => target, ... }
+     *
+     * @var array<int, string> { position => target, ... }
      */
-    private $positionToTarget = [];
+    private array $positionToTarget = [];
 
     /**
      * Internal map of targets to lists of positions that target is hashed to.
-     * @var array { target => [ position, position, ... ], ... }
+     *
+     * @var array<string, list<int|float>> { target => [ position, position, ... ], ... }
      */
-    private $targetToPositions = [];
+    private array $targetToPositions = [];
 
     /**
      * Whether the internal map of positions to targets is already sorted.
-     * @var bool
      */
-    private $positionToTargetSorted = false;
+    private bool $positionToTargetSorted = false;
 
     /**
      * Sorted positions.
      *
-     * @var array
+     * @var list<int>
      */
-    private $sortedPositions = [];
+    private array $sortedPositions = [];
 
     /**
      * Internal counter for current number of positions.
-     *
-     * @var integer
      */
-    private $positionCount = 0;
+    private int $positionCount = 0;
 
     /**
-     * Constructor.
-     * @param \Flexihash\Hasher\HasherInterface $hasher
-     * @param int $replicas Amount of positions to hash each target to.
+     * @param HasherInterface|null $hasher
+     * @param int|null $replicas Amount of positions to hash each target to.
      */
-    public function __construct(HasherInterface $hasher = null, $replicas = null)
+    public function __construct(?HasherInterface $hasher = null, ?int $replicas = null)
     {
-        $this->hasher = $hasher ? $hasher : new Crc32Hasher();
+        $this->hasher = $hasher ?? new Crc32Hasher();
         if (!empty($replicas)) {
             $this->replicas = $replicas;
         }
@@ -80,11 +75,13 @@ class Flexihash
 
     /**
      * Add a target.
+     *
      * @param string $target
-     * @param float $weight
-     * @chainable
+     * @param int|float $weight
+     * @return static fluent
+     * @throws Exception when target already exists
      */
-    public function addTarget($target, $weight = 1)
+    public function addTarget(string $target, int|float $weight = 1): static
     {
         if (isset($this->targetToPositions[$target])) {
             throw new Exception("Target '$target' already exists.");
@@ -94,9 +91,10 @@ class Flexihash
 
         // hash the target into multiple positions
         for ($i = 0; $i < round($this->replicas * $weight); ++$i) {
-            $position = $this->hasher->hash($target.$i);
+            $position = $this->hasher->hash($target . $i);
+            // @phpstan-ignore offsetAccess.invalidOffset (32bit hashers may return float; PHP coerces keys to int)
             $this->positionToTarget[$position] = $target; // lookup
-            $this->targetToPositions[$target] [] = $position; // target removal
+            $this->targetToPositions[$target][] = $position; // target removal
         }
 
         $this->positionToTargetSorted = false;
@@ -108,11 +106,11 @@ class Flexihash
     /**
      * Add a list of targets.
      *
-     * @param array $targets
-     * @param float $weight
-     * @return self fluent
+     * @param list<string> $targets
+     * @param int|float $weight
+     * @return static fluent
      */
-    public function addTargets($targets, $weight = 1)
+    public function addTargets(array $targets, int|float $weight = 1): static
     {
         foreach ($targets as $target) {
             $this->addTarget($target, $weight);
@@ -125,16 +123,17 @@ class Flexihash
      * Remove a target.
      *
      * @param string $target
-     * @return self fluent
-     * @throws \Flexihash\Exception when target does not exist
+     * @return static fluent
+     * @throws Exception when target does not exist
      */
-    public function removeTarget($target)
+    public function removeTarget(string $target): static
     {
         if (!isset($this->targetToPositions[$target])) {
             throw new Exception("Target '$target' does not exist.");
         }
 
         foreach ($this->targetToPositions[$target] as $position) {
+            // @phpstan-ignore offsetAccess.invalidOffset (32bit hashers may return float; PHP coerces keys to int)
             unset($this->positionToTarget[$position]);
         }
 
@@ -148,7 +147,8 @@ class Flexihash
 
     /**
      * A list of all potential targets.
-     * @return array
+     *
+     * @return list<string>
      */
     public function getAllTargets(): array
     {
@@ -157,11 +157,12 @@ class Flexihash
 
     /**
      * Looks up the target for the given resource.
+     *
      * @param string $resource
      * @return string
-     * @throws \Flexihash\Exception when no targets defined
+     * @throws Exception when no targets defined
      */
-    public function lookup($resource): string
+    public function lookup(string $resource): string
     {
         $targets = $this->lookupList($resource, 1);
         if (empty($targets)) {
@@ -177,12 +178,12 @@ class Flexihash
      *
      * @param string $resource
      * @param int $requestedCount The length of the list to return
-     * @return array List of targets
-     * @throws \Flexihash\Exception when count is invalid
+     * @return list<string> List of targets
+     * @throws Exception when count is invalid
      */
-    public function lookupList($resource, $requestedCount): array
+    public function lookupList(string $resource, int $requestedCount): array
     {
-        if (!$requestedCount) {
+        if ($requestedCount <= 0) {
             throw new Exception('Invalid count requested');
         }
 
@@ -193,60 +194,50 @@ class Flexihash
 
         // optimize single target
         if ($this->targetCount == 1) {
-            return array_unique(array_values($this->positionToTarget));
+            return array_values(array_unique($this->positionToTarget));
         }
 
         // hash resource to a position
         $resourcePosition = $this->hasher->hash($resource);
 
-        $results = [];
-
         $this->sortPositionTargets();
 
+        // binary search for the first position greater than the resource
+        // position, wrapping around to the start of the ring if there is none
         $positions = $this->sortedPositions;
         $low = 0;
-        $high = $this->positionCount - 1;
-        $notfound = false;
-
-        // binary search of the first position greater than resource position
-        while ($high >= $low || $notfound = true) {
-            $probe = (int) floor(($high + $low) / 2);
-
-            if ($notfound === false && $positions[$probe] <= $resourcePosition) {
-                $low = $probe + 1;
-            } elseif ($probe === 0 || $resourcePosition > $positions[$probe - 1] || $notfound === true) {
-                if ($notfound) {
-                    // if not found is true, it means binary search failed to find any position greater
-                    // than ressource position, in this case, the last position is the bigest lower
-                    // position and first position is the next one after cycle
-                    $probe = 0;
-                }
-
-                $results[] = $this->positionToTarget[$positions[$probe]];
-
-                if ($requestedCount > 1) {
-                    for ($i = $requestedCount - 1; $i > 0; --$i) {
-                        if (++$probe > $this->positionCount - 1) {
-                            $probe = 0; // cycle
-                        }
-                        $results[] = $this->positionToTarget[$positions[$probe]];
-                    }
-                }
-
-                break;
+        $high = $this->positionCount;
+        while ($low < $high) {
+            $mid = ($low + $high) >> 1;
+            if ($positions[$mid] <= $resourcePosition) {
+                $low = $mid + 1;
             } else {
-                $high = $probe - 1;
+                $high = $mid;
+            }
+        }
+        $offset = ($low === $this->positionCount) ? 0 : $low;
+
+        // walk the ring collecting distinct targets until there are enough,
+        // or until every position has been considered
+        $results = [];
+        for ($i = 0; $i < $this->positionCount; ++$i) {
+            $target = $this->positionToTarget[$positions[($offset + $i) % $this->positionCount]];
+            if (!in_array($target, $results, true)) {
+                $results[] = $target;
+                if (count($results) === $requestedCount || count($results) === $this->targetCount) {
+                    break;
+                }
             }
         }
 
-        return array_unique($results);
+        return $results;
     }
 
     public function __toString(): string
     {
         return sprintf(
             '%s{targets:[%s]}',
-            get_class($this),
+            static::class,
             implode(',', $this->getAllTargets())
         );
     }
@@ -257,7 +248,7 @@ class Flexihash
     /**
      * Sorts the internal mapping (positions to targets) by position.
      */
-    private function sortPositionTargets()
+    private function sortPositionTargets(): void
     {
         // sort by key (position) if not already
         if (!$this->positionToTargetSorted) {

@@ -1,20 +1,34 @@
 # Flexihash
 
-[![Build Status](https://travis-ci.org/pda/flexihash.svg?branch=master)](https://travis-ci.org/pda/flexihash) [![Coverage Status](https://coveralls.io/repos/github/pda/flexihash/badge.svg?branch=master)](https://coveralls.io/github/pda/flexihash?branch=master)
+[![CI](https://github.com/pda/flexihash/actions/workflows/ci.yml/badge.svg)](https://github.com/pda/flexihash/actions/workflows/ci.yml)
 
-Flexihash is a small PHP library which implements [consistent hashing](http://en.wikipedia.org/wiki/Consistent_hashing), which is most useful in distributed caching. It requires PHP5 and uses [PHPUnit](http://simpletest.org/) for unit testing.
+Flexihash is a small PHP library which implements [consistent hashing](https://en.wikipedia.org/wiki/Consistent_hashing), which is most useful in distributed caching.
+
+## Requirements
+
+Flexihash 4.x requires PHP 8.1 or later, and has no other dependencies.
+Older releases remain available for older PHP versions:
+
+| Flexihash | PHP        |
+|-----------|------------|
+| 4.x       | >= 8.1     |
+| 3.x       | >= 7.2     |
+| 2.x       | >= 5.4     |
 
 ## Installation
 
 [Composer](https://getcomposer.org/) is the recommended installation technique. You can find flexihash on [Packagist](https://packagist.org/packages/flexihash/flexihash) so installation is as easy as
+
 ```
 composer require flexihash/flexihash
 ```
+
 or in your `composer.json`
+
 ```json
 {
     "require": {
-        "flexihash/flexihash": "^3.0.0"
+        "flexihash/flexihash": "^4.0"
     }
 }
 ```
@@ -22,6 +36,8 @@ or in your `composer.json`
 ## Usage
 
 ```php
+use Flexihash\Flexihash;
+
 $hash = new Flexihash();
 
 // bulk add
@@ -44,21 +60,34 @@ $hash->removeTarget('cache-2');
 $hash->lookup('object'); // "cache-4"
 ```
 
-## Tests
+The hash algorithm (CRC32 by default) and the number of replicas
+(64 by default) can be configured on construction:
 
-### Unit Test
+```php
+use Flexihash\Flexihash;
+use Flexihash\Hasher\Md5Hasher;
+
+$hash = new Flexihash(new Md5Hasher(), 128);
+```
+
+Custom hash algorithms can be used by implementing
+`Flexihash\Hasher\HasherInterface`.
+
+## Development
 
 ```
-% vendor/bin/phpunit
+composer install
 ```
 
-### Benchmark Test
-
-```
-% vendor/bin/phpunit tests/BenchmarkTest.php
-```
+| Command              | Description                             |
+|----------------------|-----------------------------------------|
+| `composer test`      | Run the unit test suite (PHPUnit)       |
+| `composer cs`        | Check coding standards (PSR-12)         |
+| `composer stan`      | Run static analysis (PHPStan)           |
+| `composer check`     | Run all of the above                    |
+| `composer benchmark` | Run the benchmark suite                 |
 
 ## Further Reading
 
-  * http://www.spiteful.com/2008/03/17/programmers-toolbox-part-3-consistent-hashing/
-  * http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html
+  * https://www.spiteful.com/2008/03/17/programmers-toolbox-part-3-consistent-hashing/
+  * https://web.archive.org/web/20120605030524/http://weblogs.java.net/blog/tomwhite/archive/2007/11/consistent_hash.html
