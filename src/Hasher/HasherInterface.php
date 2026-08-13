@@ -18,7 +18,6 @@ interface HasherInterface
      * The data must have 0xFFFFFFFF possible values, and be sortable by
      * PHP sort functions using SORT_REGULAR.
      *
-     * @param string $string
      * @return int|float A sortable format with 0xFFFFFFFF possible values
      */
     public function hash(string $string): int|float;

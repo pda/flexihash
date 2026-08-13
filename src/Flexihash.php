@@ -13,7 +13,7 @@ use Flexihash\Hasher\HasherInterface;
  * @author Paul Annesley
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class Flexihash
+class Flexihash implements \Stringable
 {
     /**
      * The number of positions to hash each target to.
@@ -23,7 +23,7 @@ class Flexihash
     /**
      * The hash algorithm, encapsulated in a HasherInterface implementation.
      */
-    private HasherInterface $hasher;
+    private readonly HasherInterface $hasher;
 
     /**
      * Internal counter for current number of targets.
@@ -62,7 +62,6 @@ class Flexihash
     private int $positionCount = 0;
 
     /**
-     * @param HasherInterface|null $hasher
      * @param int|null $replicas Amount of positions to hash each target to.
      */
     public function __construct(?HasherInterface $hasher = null, ?int $replicas = null)
@@ -76,8 +75,6 @@ class Flexihash
     /**
      * Add a target.
      *
-     * @param string $target
-     * @param int|float $weight
      * @return static fluent
      * @throws Exception when target already exists
      */
@@ -107,7 +104,6 @@ class Flexihash
      * Add a list of targets.
      *
      * @param list<string> $targets
-     * @param int|float $weight
      * @return static fluent
      */
     public function addTargets(array $targets, int|float $weight = 1): static
@@ -122,7 +118,6 @@ class Flexihash
     /**
      * Remove a target.
      *
-     * @param string $target
      * @return static fluent
      * @throws Exception when target does not exist
      */
@@ -158,14 +153,12 @@ class Flexihash
     /**
      * Looks up the target for the given resource.
      *
-     * @param string $resource
-     * @return string
      * @throws Exception when no targets defined
      */
     public function lookup(string $resource): string
     {
         $targets = $this->lookupList($resource, 1);
-        if (empty($targets)) {
+        if ($targets === []) {
             throw new Exception('No targets exist');
         }
 
@@ -176,7 +169,6 @@ class Flexihash
      * Get a list of targets for the resource, in order of precedence.
      * Up to $requestedCount targets are returned, less if there are fewer in total.
      *
-     * @param string $resource
      * @param int $requestedCount The length of the list to return
      * @return list<string> List of targets
      * @throws Exception when count is invalid
@@ -188,12 +180,12 @@ class Flexihash
         }
 
         // handle no targets
-        if (empty($this->positionToTarget)) {
+        if ($this->positionToTarget === []) {
             return [];
         }
 
         // optimize single target
-        if ($this->targetCount == 1) {
+        if ($this->targetCount === 1) {
             return array_values(array_unique($this->positionToTarget));
         }
 

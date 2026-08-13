@@ -23,6 +23,7 @@
     "require-dev": {
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^10.5 || ^11.5 || ^12.0",
+        "rector/rector": "^2.1",
         "squizlabs/php_codesniffer": "^3.13"
     },
     "autoload": {
@@ -41,9 +42,12 @@
         "cs": "phpcs",
         "cs:fix": "phpcbf",
         "stan": "phpstan analyse --no-progress",
+        "rector": "rector --dry-run",
+        "rector:fix": "rector",
         "check": [
             "@cs",
             "@stan",
+            "@rector",
             "@test"
         ]
     },
@@ -53,7 +57,9 @@
         "cs": "Check coding standards (PSR-12)",
         "cs:fix": "Fix coding standard violations",
         "stan": "Run static analysis",
-        "check": "Run all checks (coding standards, static analysis, tests)"
+        "rector": "Check for automated refactoring opportunities (dry-run)",
+        "rector:fix": "Apply automated refactorings",
+        "check": "Run all checks (coding standards, static analysis, rector, tests)"
     },
     "config": {
         "sort-packages": true

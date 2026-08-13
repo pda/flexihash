@@ -6,13 +6,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [4.0.0] - 2026-07-06
+## [4.0.0] - 2026-08-14
 Hash values and position derivation are unchanged: upgrading does **not**
 remap keys to different targets.
 
 ### Added
 - GitHub Actions CI, testing PHP 8.1 through 8.5.
 - Static analysis with PHPStan (level 9).
+- Automated refactoring with Rector, with PHP sets derived from the
+  supported PHP floor in composer.json.
 - Full parameter, return, and property type declarations throughout.
 - Composer scripts: `test`, `benchmark`, `cs`, `cs:fix`, `stan`, `check`.
 - Regression tests for `lookupList()` with duplicate adjacent ring positions.

@@ -79,13 +79,14 @@ Custom hash algorithms can be used by implementing
 composer install
 ```
 
-| Command              | Description                             |
-|----------------------|-----------------------------------------|
-| `composer test`      | Run the unit test suite (PHPUnit)       |
-| `composer cs`        | Check coding standards (PSR-12)         |
-| `composer stan`      | Run static analysis (PHPStan)           |
-| `composer check`     | Run all of the above                    |
-| `composer benchmark` | Run the benchmark suite                 |
+| Command              | Description                                        |
+|----------------------|----------------------------------------------------|
+| `composer test`      | Run the unit test suite (PHPUnit)                  |
+| `composer cs`        | Check coding standards (PSR-12)                    |
+| `composer stan`      | Run static analysis (PHPStan)                      |
+| `composer rector`    | Check for automated refactorings (Rector, dry-run) |
+| `composer check`     | Run all of the above                               |
+| `composer benchmark` | Run the benchmark suite                            |
 
 ## Further Reading
 
