@@ -1,4 +1,4 @@
-#Roadmap
+# Roadmap
 
 ## v1.0.0
 
@@ -26,5 +26,9 @@ The historical API will be broken by classname changes.
 
 ## v4.0.0
 
-- [ ] PHP 7.3 minimum.
-- [ ] PHPUnit 9.
+- [x] PHP 8.1 minimum.
+- [x] Full parameter, return and property type declarations.
+- [x] PHPUnit 10/11/12.
+- [x] PSR-12 coding standard.
+- [x] Static analysis with PHPStan.
+- [x] GitHub Actions CI (replacing Travis CI).

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Flexihash\Hasher;
@@ -19,13 +20,11 @@ class Md5Hasher implements HasherInterface
      *
      * The substring is converted to an int since hex strings sometimes get
      * treated as ints if all digits are ints and this results in unexpected
-     * sorting order.
+     * sorting order. Under 32bit PHP this may be a float.
      *
-     * @param  string $string
-     * @return int | float
      * @author Dom Morgan <dom@d3r.com>
      */
-    public function hash($string)
+    public function hash(string $string): int|float
     {
         return hexdec(substr(md5($string), 0, 8));
     }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Flexihash\Tests;
@@ -6,12 +7,14 @@ namespace Flexihash\Tests;
 use Flexihash\Exception;
 use Flexihash\Flexihash;
 use Flexihash\Tests\Hasher\MockHasher;
+use Flexihash\Tests\Hasher\SequenceHasher;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Paul Annesley
  * @license http://www.opensource.org/licenses/mit-license.php
  */
-class FlexihashTest extends \PHPUnit\Framework\TestCase
+class FlexihashTest extends TestCase
 {
     public function testGetAllTargetsEmpty(): void
     {
@@ -23,7 +26,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
     {
         $hashSpace = new Flexihash();
         $hashSpace->addTarget('t-a');
-        $this->expectException('Flexihash\Exception');
+        $this->expectException(Exception::class);
         $hashSpace->addTarget('t-a');
     }
 
@@ -63,7 +66,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
     public function testRemoveTargetFailsOnMissingTarget(): void
     {
         $hashSpace = new Flexihash();
-        $this->expectException('Flexihash\Exception');
+        $this->expectException(Exception::class);
         $hashSpace->removeTarget('not-there');
     }
 
@@ -86,7 +89,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
 
     public function testHashSpaceLookupListNoTargets(): void
     {
-        $this->expectException('Flexihash\Exception');
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('No targets exist');
         $hashSpace = new Flexihash();
         $hashSpace->lookup('t1');
@@ -94,17 +97,25 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
 
     public function testHashSpaceLookupListNo(): void
     {
-        $this->expectException('Flexihash\Exception');
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Invalid count requested');
         $hashSpace = new Flexihash();
         $hashSpace->lookupList('t1', 0);
+    }
+
+    public function testHashSpaceLookupListNegativeCount(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid count requested');
+        $hashSpace = new Flexihash();
+        $hashSpace->lookupList('t1', -1);
     }
 
     public function testHashSpaceLookupsAreValidTargets(): void
     {
         $targets = [];
         foreach (range(1, 10) as $i) {
-            $targets [] = "target$i";
+            $targets[] = "target$i";
         }
 
         $hashSpace = new Flexihash();
@@ -127,7 +138,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
 
         $results1 = [];
         foreach (range(1, 100) as $i) {
-            $results1 [] = $hashSpace->lookup("t$i");
+            $results1[] = $hashSpace->lookup("t$i");
         }
 
         $hashSpace
@@ -139,7 +150,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
 
         $results2 = [];
         foreach (range(1, 100) as $i) {
-            $results2 [] = $hashSpace->lookup("t$i");
+            $results2[] = $hashSpace->lookup("t$i");
         }
 
         // This is probably optimistic, as adding/removing a target may
@@ -155,7 +166,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
         }
         $results1 = [];
         foreach (range(1, 100) as $i) {
-            $results1 [] = $hashSpace1->lookup("t$i");
+            $results1[] = $hashSpace1->lookup("t$i");
         }
 
         $hashSpace2 = new Flexihash();
@@ -164,7 +175,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
         }
         $results2 = [];
         foreach (range(1, 100) as $i) {
-            $results2 [] = $hashSpace2->lookup("t$i");
+            $results2[] = $hashSpace2->lookup("t$i");
         }
 
         $this->assertEquals($results1, $results2);
@@ -179,8 +190,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
 
         $targets = $hashSpace->lookupList('resource', 2);
 
-        $this->assertIsArray($targets);
-        $this->assertEquals(count($targets), 2);
+        $this->assertCount(2, $targets);
         $this->assertNotEquals($targets[0], $targets[1]);
     }
 
@@ -191,8 +201,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
 
         $targets = $hashSpace->lookupList('resource', 2);
 
-        $this->assertIsArray($targets);
-        $this->assertEquals(count($targets), 1);
+        $this->assertCount(1, $targets);
         $this->assertEquals($targets[0], 'single-target');
     }
 
@@ -204,8 +213,7 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
 
         $targets = $hashSpace->lookupList('resource', 4);
 
-        $this->assertIsArray($targets);
-        $this->assertEquals(count($targets), 2);
+        $this->assertCount(2, $targets);
         $this->assertNotEquals($targets[0], $targets[1]);
     }
 
@@ -273,6 +281,48 @@ class FlexihashTest extends \PHPUnit\Framework\TestCase
         $targets = $hashSpace->lookupList('resource', 2);
 
         $this->assertEquals($targets, ['t2', 't3']);
+    }
+
+    /**
+     * Adjacent positions on the ring may belong to the same target when a
+     * target has more than one replica. Duplicates must be skipped, not
+     * counted towards the requested number of targets.
+     *
+     * Regression test for the binary search lookup.
+     */
+    public function testGetMultipleTargetsWithDuplicateAdjacentPositions(): void
+    {
+        $sequenceHasher = new SequenceHasher();
+
+        $hashSpace = new Flexihash($sequenceHasher, 2);
+
+        $sequenceHasher->queue = [10, 20];
+        $hashSpace->addTarget('t1'); // positions 10 and 20
+
+        $sequenceHasher->queue = [30, 40];
+        $hashSpace->addTarget('t2'); // positions 30 and 40
+
+        $sequenceHasher->fallback = 5;
+        // ring order from position 5 is t1(10), t1(20), t2(30), t2(40);
+        // the duplicate t1 at position 20 must not exhaust the requested count
+        $this->assertEquals(['t1', 't2'], $hashSpace->lookupList('resource', 2));
+    }
+
+    public function testGetMultipleTargetsWithDuplicatePositionsAcrossWrapAround(): void
+    {
+        $sequenceHasher = new SequenceHasher();
+
+        $hashSpace = new Flexihash($sequenceHasher, 2);
+
+        $sequenceHasher->queue = [10, 40];
+        $hashSpace->addTarget('t1'); // positions 10 and 40
+
+        $sequenceHasher->queue = [20, 30];
+        $hashSpace->addTarget('t2'); // positions 20 and 30
+
+        $sequenceHasher->fallback = 35;
+        // ring order from position 35 is t1(40), then wrapping to t1(10), t2(20), t2(30)
+        $this->assertEquals(['t1', 't2'], $hashSpace->lookupList('resource', 2));
     }
 
     public function testFallbackPrecedenceWhenServerRemoved(): void
